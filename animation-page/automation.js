@@ -114,13 +114,13 @@ export function initAutomation() {
     scrollTrigger: {
       trigger: section,
       start: "top top",
-      end: "+=2200%",
+      end: "+=1600%",
       pin: true,
-      scrub: 1.1,
+      scrub: 0.6,
       anticipatePin: 1,
       onUpdate: (self) => {
         modulateShader(self.progress, tl);
-        const heroOpacity = Math.max(0, 1 - self.progress * 12);
+        const heroOpacity = Math.max(0, 1 - self.progress * 25);
         gsap.set(heroUi, {
           opacity: heroOpacity,
           visibility: heroOpacity < 0.03 ? "hidden" : "visible",
@@ -131,16 +131,16 @@ export function initAutomation() {
   });
 
   // ═══════════════════════════════════════
-  // PANEL 0 — AUTOMATIZACIÓN  (0 → 22)
+  // PANEL 0 — AUTOMATIZACIÓN  (0 → 14)
   // ═══════════════════════════════════════
   tl.addLabel("auto", 0);
   tl.add(() => { setActivePanel(panels[0]); setActiveDot(0); }, "auto");
 
-  tl.to(".svc-auto .svc-eyebrow", { opacity: 0.8, y: 0, duration: 3, ease: "power2.out" }, "auto+=1");
-  tl.to(".svc-auto .svc-title", { opacity: 1, y: 0, duration: 4, ease: "power2.out" }, "auto+=2");
-  tl.to(".svc-auto .svc-lead", { opacity: 0.9, y: 0, duration: 3, ease: "power2.out" }, "auto+=4");
-  tl.to(".svc-auto .svc-block", { opacity: 1, y: 0, stagger: 1.2, duration: 3, ease: "power2.out" }, "auto+=6");
-  tl.to(".svc-auto .svc-benefits", { opacity: 1, y: 0, duration: 3, ease: "power2.out" }, "auto+=9");
+  tl.to(".svc-auto .svc-eyebrow", { opacity: 0.8, y: 0, duration: 2, ease: "power2.out" }, "auto+=0.5");
+  tl.to(".svc-auto .svc-title", { opacity: 1, y: 0, duration: 2.5, ease: "power2.out" }, "auto+=1");
+  tl.to(".svc-auto .svc-lead", { opacity: 0.9, y: 0, duration: 2, ease: "power2.out" }, "auto+=2");
+  tl.to(".svc-auto .svc-block", { opacity: 1, y: 0, stagger: 0.8, duration: 2, ease: "power2.out" }, "auto+=3.5");
+  tl.to(".svc-auto .svc-benefits", { opacity: 1, y: 0, duration: 2, ease: "power2.out" }, "auto+=5.5");
 
   // Flow cascade — fade in + light up
   const flowNodes = gsap.utils.toArray(".flow-node");
@@ -149,18 +149,18 @@ export function initAutomation() {
     tl.to(node, {
       opacity: 1,
       y: 0,
-      duration: 1.8,
+      duration: 1.2,
       ease: "power2.out",
       onStart: () => node.classList.add("is-lit"),
       onReverseComplete: () => node.classList.remove("is-lit")
-    }, `auto+=${7 + i * 1.6}`);
+    }, `auto+=${4 + i * 1}`);
     if (flowPipes[i]) {
       tl.to(flowPipes[i], {
         opacity: 1,
-        duration: 1.2,
+        duration: 1,
         onStart: () => flowPipes[i].classList.add("is-lit"),
         onReverseComplete: () => flowPipes[i].classList.remove("is-lit")
-      }, `auto+=${8 + i * 1.6}`);
+      }, `auto+=${5 + i * 1}`);
     }
   });
 
@@ -170,266 +170,259 @@ export function initAutomation() {
   tl.to(autoExampleWords.words, {
     opacity: 1,
     y: 0,
-    stagger: 0.08,
-    duration: 1.2,
+    stagger: 0.06,
+    duration: 1,
     ease: "power2.out"
-  }, "auto+=15.5");
+  }, "auto+=9");
 
   // Hold reading time
-  tl.to({}, { duration: 4 }, "auto+=18.5");
+  tl.to({}, { duration: 2 }, "auto+=11.5");
 
   // ═══════════════════════════════════════
-  // TRANSITION → ERP  (22 → 26)
+  // TRANSITION → ERP  (14 → 16)
   // ═══════════════════════════════════════
-  tl.addLabel("toErp", 22);
+  tl.addLabel("toErp", 14);
 
   // DUST DISSOLVE → every element in Auto panel dissolves before exit
-  tl.to(".svc-auto .svc-benefits", { opacity: 0, scale: 0.7, y: -12, filter: "blur(2px)", duration: 2, ease: "power2.in" }, "toErp+=1");
-  tl.to(".svc-auto .svc-block", { opacity: 0, scale: 0.8, y: -10, filter: "blur(2px)", stagger: 0.5, duration: 2, ease: "power2.in" }, "toErp+=1.5");
-  tl.to(".svc-auto .svc-lead", { opacity: 0, scale: 0.85, y: -8, filter: "blur(2px)", duration: 2, ease: "power2.in" }, "toErp+=2");
-  tl.to(".svc-auto .svc-title", { opacity: 0, scale: 0.9, y: -6, filter: "blur(2px)", duration: 2, ease: "power2.in" }, "toErp+=2.5");
-  tl.to(".svc-auto .svc-eyebrow", { opacity: 0, y: -6, filter: "blur(2px)", duration: 2, ease: "power2.in" }, "toErp+=3");
+  tl.to(".svc-auto .svc-benefits", { opacity: 0, scale: 0.7, y: -12, filter: "blur(2px)", duration: 1.2, ease: "power2.in" }, "toErp+=0.3");
+  tl.to(".svc-auto .svc-block", { opacity: 0, scale: 0.8, y: -10, filter: "blur(2px)", stagger: 0.3, duration: 1.2, ease: "power2.in" }, "toErp+=0.5");
+  tl.to(".svc-auto .svc-lead", { opacity: 0, scale: 0.85, y: -8, filter: "blur(2px)", duration: 1.2, ease: "power2.in" }, "toErp+=0.7");
+  tl.to(".svc-auto .svc-title", { opacity: 0, scale: 0.9, y: -6, filter: "blur(2px)", duration: 1.2, ease: "power2.in" }, "toErp+=0.9");
+  tl.to(".svc-auto .svc-eyebrow", { opacity: 0, y: -6, filter: "blur(2px)", duration: 1, ease: "power2.in" }, "toErp+=1.1");
 
-  // DUST DISSOLVE → flow nodes + pipes dissolve into particles
   flowNodes.forEach((node, i) => {
     tl.to(node, {
       opacity: 0,
       scale: 0.6,
       y: -14,
       filter: "blur(3px)",
-      duration: 2.5,
+      duration: 1.5,
       ease: "power2.in",
       onStart: () => node.classList.remove("is-lit"),
       onReverseComplete: () => node.classList.add("is-lit")
-    }, `toErp+=${0.2 + (flowNodes.length - 1 - i) * 0.5}`);
+    }, `toErp+=${0.1 + (flowNodes.length - 1 - i) * 0.3}`);
   });
   flowPipes.forEach((pipe, i) => {
     tl.to(pipe, {
       opacity: 0,
-      duration: 1.5,
+      duration: 1,
       ease: "power1.in",
       onStart: () => pipe.classList.remove("is-lit")
-    }, `toErp+=${0.5 + (flowPipes.length - 1 - i) * 0.5}`);
+    }, `toErp+=${0.3 + (flowPipes.length - 1 - i) * 0.3}`);
   });
   tl.to(".svc-auto .svc-example-text", {
     opacity: 0,
     filter: "blur(2px)",
-    duration: 2,
+    duration: 1,
     ease: "power2.in"
-  }, "toErp+=3");
+  }, "toErp+=1");
   tl.to(autoExampleWords.words, {
     opacity: 0,
     y: -6,
-    stagger: { each: 0.06, from: "end" },
-    duration: 1,
+    stagger: { each: 0.04, from: "end" },
+    duration: 0.8,
     ease: "power2.in"
-  }, "toErp+=2.8");
+  }, "toErp+=0.9");
 
-  tl.to(panels[0], { opacity: 0, y: -30, duration: 3, ease: "power2.inOut" }, "toErp");
-  tl.set(panels[0], { visibility: "hidden" }, "toErp+=3");
-  tl.set(panels[1], { visibility: "visible", y: 30 }, "toErp+=1");
-  tl.to(panels[1], { opacity: 1, y: 0, duration: 3, ease: "power2.out" }, "toErp+=1.5");
-  tl.add(() => { setActivePanel(panels[1]); setActiveDot(1); }, "toErp+=2");
+  tl.to(panels[0], { opacity: 0, y: -30, duration: 2, ease: "power2.inOut" }, "toErp");
+  tl.set(panels[0], { visibility: "hidden" }, "toErp+=2");
+  tl.set(panels[1], { visibility: "visible", y: 30 }, "toErp+=0.5");
+  tl.to(panels[1], { opacity: 1, y: 0, duration: 2, ease: "power2.out" }, "toErp+=0.8");
+  tl.add(() => { setActivePanel(panels[1]); setActiveDot(1); }, "toErp+=1");
 
   // ═══════════════════════════════════════
-  // PANEL 1 — ERP  (26 → 48)
+  // PANEL 1 — ERP  (16 → 28)
   // ═══════════════════════════════════════
-  tl.addLabel("erp", 26);
+  tl.addLabel("erp", 16);
 
-  tl.to(".svc-erp .svc-eyebrow", { opacity: 0.8, y: 0, duration: 3, ease: "power2.out" }, "erp+=1");
-  tl.to(".svc-erp .svc-title", { opacity: 1, y: 0, duration: 4, ease: "power2.out" }, "erp+=2");
-  tl.to(".svc-erp .svc-lead", { opacity: 0.9, y: 0, duration: 3, ease: "power2.out" }, "erp+=4");
-  tl.to(".svc-erp .svc-block", { opacity: 1, y: 0, stagger: 1.2, duration: 3, ease: "power2.out" }, "erp+=6");
-  tl.to(".svc-erp .svc-benefits", { opacity: 1, y: 0, duration: 3, ease: "power2.out" }, "erp+=9");
+  tl.to(".svc-erp .svc-eyebrow", { opacity: 0.8, y: 0, duration: 2, ease: "power2.out" }, "erp+=0.5");
+  tl.to(".svc-erp .svc-title", { opacity: 1, y: 0, duration: 2.5, ease: "power2.out" }, "erp+=1");
+  tl.to(".svc-erp .svc-lead", { opacity: 0.9, y: 0, duration: 2, ease: "power2.out" }, "erp+=2");
+  tl.to(".svc-erp .svc-block", { opacity: 1, y: 0, stagger: 0.8, duration: 2, ease: "power2.out" }, "erp+=3.5");
+  tl.to(".svc-erp .svc-benefits", { opacity: 1, y: 0, duration: 2, ease: "power2.out" }, "erp+=5.5");
 
   tl.to(".erp-card", {
     opacity: 1,
     y: 0,
-    stagger: 0.8,
-    duration: 2.5,
+    stagger: 0.5,
+    duration: 1.8,
     ease: "power2.out"
-  }, "erp+=7");
+  }, "erp+=4");
 
   tl.to(".erp-modules span", {
     opacity: 1,
-    stagger: 0.25,
-    duration: 1.5,
+    stagger: 0.15,
+    duration: 1.2,
     ease: "power2.out"
-  }, "erp+=12");
+  }, "erp+=7.5");
 
-  // Example — staggered lines, each line appears with a soft scale
   const erpExample = new SplitText(".svc-erp .svc-example-text", { type: "lines" });
   gsap.set(erpExample.lines, { opacity: 0, y: 10, scale: 0.98 });
   tl.to(erpExample.lines, {
     opacity: 1,
     y: 0,
     scale: 1,
-    stagger: 0.4,
-    duration: 1.4,
+    stagger: 0.25,
+    duration: 1,
     ease: "power2.out"
-  }, "erp+=15");
-  tl.to({}, { duration: 4 }, "erp+=18");
+  }, "erp+=9.5");
+  tl.to({}, { duration: 2 }, "erp+=11.5");
 
   // ═══════════════════════════════════════
-  // TRANSITION → IA  (48 → 52)
+  // TRANSITION → IA  (28 → 30)
   // ═══════════════════════════════════════
-  tl.addLabel("toIa", 48);
+  tl.addLabel("toIa", 28);
 
-  // DUST DISSOLVE — everything in ERP panel dissolves before exit
-  tl.to(".svc-erp .svc-benefits", { opacity: 0, scale: 0.7, y: -12, filter: "blur(2px)", duration: 2, ease: "power2.in" }, "toIa+=1");
-  tl.to(".svc-erp .svc-block", { opacity: 0, scale: 0.8, y: -10, filter: "blur(2px)", stagger: 0.5, duration: 2, ease: "power2.in" }, "toIa+=1.5");
-  tl.to(".svc-erp .svc-lead", { opacity: 0, scale: 0.85, y: -8, filter: "blur(2px)", duration: 2, ease: "power2.in" }, "toIa+=2");
-  tl.to(".svc-erp .svc-title", { opacity: 0, scale: 0.9, y: -6, filter: "blur(2px)", duration: 2, ease: "power2.in" }, "toIa+=2.5");
-  tl.to(".svc-erp .svc-eyebrow", { opacity: 0, y: -6, filter: "blur(2px)", duration: 2, ease: "power2.in" }, "toIa+=3");
-  tl.to(".erp-card", { opacity: 0, scale: 0.6, y: -14, filter: "blur(3px)", stagger: 0.5, duration: 2.5, ease: "power2.in" }, "toIa+=1");
-  tl.to(".erp-modules span", { opacity: 0, scale: 0.5, y: -10, filter: "blur(3px)", stagger: 0.3, duration: 2, ease: "power2.in" }, "toIa+=2");
-  tl.to(erpExample.lines, { opacity: 0, scale: 0.92, y: -8, stagger: { each: 0.1, from: "end" }, duration: 1.2, ease: "power2.in" }, "toIa+=2.8");
-  tl.to(".svc-erp .svc-example-text", { opacity: 0, filter: "blur(2px)", duration: 2, ease: "power2.in" }, "toIa+=3");
+  tl.to(".svc-erp .svc-benefits", { opacity: 0, scale: 0.7, y: -12, filter: "blur(2px)", duration: 1.2, ease: "power2.in" }, "toIa+=0.3");
+  tl.to(".svc-erp .svc-block", { opacity: 0, scale: 0.8, y: -10, filter: "blur(2px)", stagger: 0.3, duration: 1.2, ease: "power2.in" }, "toIa+=0.5");
+  tl.to(".svc-erp .svc-lead", { opacity: 0, scale: 0.85, y: -8, filter: "blur(2px)", duration: 1.2, ease: "power2.in" }, "toIa+=0.7");
+  tl.to(".svc-erp .svc-title", { opacity: 0, scale: 0.9, y: -6, filter: "blur(2px)", duration: 1.2, ease: "power2.in" }, "toIa+=0.9");
+  tl.to(".svc-erp .svc-eyebrow", { opacity: 0, y: -6, filter: "blur(2px)", duration: 1, ease: "power2.in" }, "toIa+=1.1");
+  tl.to(".erp-card", { opacity: 0, scale: 0.6, y: -14, filter: "blur(3px)", stagger: 0.3, duration: 1.5, ease: "power2.in" }, "toIa+=0.2");
+  tl.to(".erp-modules span", { opacity: 0, scale: 0.5, y: -10, filter: "blur(3px)", stagger: 0.2, duration: 1.2, ease: "power2.in" }, "toIa+=0.6");
+  tl.to(erpExample.lines, { opacity: 0, scale: 0.92, y: -8, stagger: { each: 0.08, from: "end" }, duration: 0.8, ease: "power2.in" }, "toIa+=1");
+  tl.to(".svc-erp .svc-example-text", { opacity: 0, filter: "blur(2px)", duration: 1, ease: "power2.in" }, "toIa+=1.2");
 
-  tl.to(panels[1], { opacity: 0, y: -30, duration: 3, ease: "power2.inOut" }, "toIa");
-  tl.set(panels[1], { visibility: "hidden" }, "toIa+=3");
-  tl.set(panels[2], { visibility: "visible", y: 30 }, "toIa+=1");
-  tl.to(panels[2], { opacity: 1, y: 0, duration: 3, ease: "power2.out" }, "toIa+=1.5");
-  tl.add(() => { setActivePanel(panels[2]); setActiveDot(2); }, "toIa+=2");
+  tl.to(panels[1], { opacity: 0, y: -30, duration: 2, ease: "power2.inOut" }, "toIa");
+  tl.set(panels[1], { visibility: "hidden" }, "toIa+=2");
+  tl.set(panels[2], { visibility: "visible", y: 30 }, "toIa+=0.5");
+  tl.to(panels[2], { opacity: 1, y: 0, duration: 2, ease: "power2.out" }, "toIa+=0.8");
+  tl.add(() => { setActivePanel(panels[2]); setActiveDot(2); }, "toIa+=1");
 
   // ═══════════════════════════════════════
-  // PANEL 2 — IA  (52 → 74)
+  // PANEL 2 — IA  (30 → 42)
   // ═══════════════════════════════════════
-  tl.addLabel("ia", 52);
+  tl.addLabel("ia", 30);
 
-  tl.to(".svc-ia .svc-eyebrow", { opacity: 0.8, y: 0, duration: 3, ease: "power2.out" }, "ia+=1");
-  tl.to(".svc-ia .svc-title", { opacity: 1, y: 0, duration: 4, ease: "power2.out" }, "ia+=2");
-  tl.to(".svc-ia .svc-lead", { opacity: 0.9, y: 0, duration: 3, ease: "power2.out" }, "ia+=4");
-  tl.to(".svc-ia .svc-block", { opacity: 1, y: 0, stagger: 1.2, duration: 3, ease: "power2.out" }, "ia+=6");
-  tl.to(".svc-ia .svc-benefits", { opacity: 1, y: 0, duration: 3, ease: "power2.out" }, "ia+=9");
+  tl.to(".svc-ia .svc-eyebrow", { opacity: 0.8, y: 0, duration: 2, ease: "power2.out" }, "ia+=0.5");
+  tl.to(".svc-ia .svc-title", { opacity: 1, y: 0, duration: 2.5, ease: "power2.out" }, "ia+=1");
+  tl.to(".svc-ia .svc-lead", { opacity: 0.9, y: 0, duration: 2, ease: "power2.out" }, "ia+=2");
+  tl.to(".svc-ia .svc-block", { opacity: 1, y: 0, stagger: 0.8, duration: 2, ease: "power2.out" }, "ia+=3.5");
+  tl.to(".svc-ia .svc-benefits", { opacity: 1, y: 0, duration: 2, ease: "power2.out" }, "ia+=5.5");
 
-  tl.to(".ia-core", { opacity: 1, scale: 1, duration: 3, ease: "back.out(1.4)" }, "ia+=6");
+  tl.to(".ia-core", { opacity: 1, scale: 1, duration: 2, ease: "back.out(1.4)" }, "ia+=4");
   tl.to(".ia-node", {
     opacity: 1,
-    stagger: 0.4,
-    duration: 2,
+    stagger: 0.3,
+    duration: 1.5,
     ease: "power2.out"
-  }, "ia+=8");
+  }, "ia+=5.5");
 
   tl.to(".ia-msg", {
     opacity: 1,
     y: 0,
-    stagger: 1.4,
-    duration: 2.2,
+    stagger: 0.8,
+    duration: 1.5,
     ease: "power2.out"
-  }, "ia+=11");
+  }, "ia+=7.5");
 
-  // Example — staggered word reveal with childlike reading rhythm
   const iaExample = new SplitText(".svc-ia .svc-example-text", { type: "words" });
   gsap.set(iaExample.words, { opacity: 0, y: 6 });
   tl.to(iaExample.words, {
     opacity: 1,
     y: 0,
-    stagger: { each: 0.1, from: "start" },
-    duration: 1,
+    stagger: { each: 0.06, from: "start" },
+    duration: 0.8,
     ease: "power3.out"
-  }, "ia+=16");
-  tl.to({}, { duration: 4 }, "ia+=19");
+  }, "ia+=10");
+  tl.to({}, { duration: 2 }, "ia+=11.5");
 
   // ═══════════════════════════════════════
-  // TRANSITION → WEB  (74 → 78)
+  // TRANSITION → WEB  (42 → 44)
   // ═══════════════════════════════════════
-  tl.addLabel("toWeb", 74);
+  tl.addLabel("toWeb", 42);
 
-  // DUST DISSOLVE — everything in IA panel dissolves before exit
-  tl.to(".svc-ia .svc-benefits", { opacity: 0, scale: 0.7, y: -12, filter: "blur(2px)", duration: 2, ease: "power2.in" }, "toWeb+=1");
-  tl.to(".svc-ia .svc-block", { opacity: 0, scale: 0.8, y: -10, filter: "blur(2px)", stagger: 0.5, duration: 2, ease: "power2.in" }, "toWeb+=1.5");
-  tl.to(".svc-ia .svc-lead", { opacity: 0, scale: 0.85, y: -8, filter: "blur(2px)", duration: 2, ease: "power2.in" }, "toWeb+=2");
-  tl.to(".svc-ia .svc-title", { opacity: 0, scale: 0.9, y: -6, filter: "blur(2px)", duration: 2, ease: "power2.in" }, "toWeb+=2.5");
-  tl.to(".svc-ia .svc-eyebrow", { opacity: 0, y: -6, filter: "blur(2px)", duration: 2, ease: "power2.in" }, "toWeb+=3");
-  tl.to(".ia-core", { opacity: 0, scale: 0.5, filter: "blur(4px)", duration: 2.5, ease: "power2.in" }, "toWeb+=1");
-  tl.to(".ia-node", { opacity: 0, scale: 0.5, y: -12, filter: "blur(3px)", stagger: 0.4, duration: 2, ease: "power2.in" }, "toWeb+=1.2");
-  tl.to(".ia-msg", { opacity: 0, scale: 0.7, y: -10, filter: "blur(3px)", stagger: 0.5, duration: 2.2, ease: "power2.in" }, "toWeb+=2");
-  tl.to(iaExample.words, { opacity: 0, y: -6, stagger: { each: 0.05, from: "end" }, duration: 1, ease: "power2.in" }, "toWeb+=2.8");
-  tl.to(".svc-ia .svc-example-text", { opacity: 0, filter: "blur(2px)", duration: 2, ease: "power2.in" }, "toWeb+=3");
+  tl.to(".svc-ia .svc-benefits", { opacity: 0, scale: 0.7, y: -12, filter: "blur(2px)", duration: 1.2, ease: "power2.in" }, "toWeb+=0.3");
+  tl.to(".svc-ia .svc-block", { opacity: 0, scale: 0.8, y: -10, filter: "blur(2px)", stagger: 0.3, duration: 1.2, ease: "power2.in" }, "toWeb+=0.5");
+  tl.to(".svc-ia .svc-lead", { opacity: 0, scale: 0.85, y: -8, filter: "blur(2px)", duration: 1.2, ease: "power2.in" }, "toWeb+=0.7");
+  tl.to(".svc-ia .svc-title", { opacity: 0, scale: 0.9, y: -6, filter: "blur(2px)", duration: 1.2, ease: "power2.in" }, "toWeb+=0.9");
+  tl.to(".svc-ia .svc-eyebrow", { opacity: 0, y: -6, filter: "blur(2px)", duration: 1, ease: "power2.in" }, "toWeb+=1.1");
+  tl.to(".ia-core", { opacity: 0, scale: 0.5, filter: "blur(4px)", duration: 1.5, ease: "power2.in" }, "toWeb+=0.2");
+  tl.to(".ia-node", { opacity: 0, scale: 0.5, y: -12, filter: "blur(3px)", stagger: 0.3, duration: 1.2, ease: "power2.in" }, "toWeb+=0.4");
+  tl.to(".ia-msg", { opacity: 0, scale: 0.7, y: -10, filter: "blur(3px)", stagger: 0.3, duration: 1.2, ease: "power2.in" }, "toWeb+=0.8");
+  tl.to(iaExample.words, { opacity: 0, y: -6, stagger: { each: 0.04, from: "end" }, duration: 0.8, ease: "power2.in" }, "toWeb+=1");
+  tl.to(".svc-ia .svc-example-text", { opacity: 0, filter: "blur(2px)", duration: 1, ease: "power2.in" }, "toWeb+=1.2");
 
-  tl.to(panels[2], { opacity: 0, y: -30, duration: 3, ease: "power2.inOut" }, "toWeb");
-  tl.set(panels[2], { visibility: "hidden" }, "toWeb+=3");
-  tl.set(panels[3], { visibility: "visible", y: 30 }, "toWeb+=1");
-  tl.to(panels[3], { opacity: 1, y: 0, duration: 3, ease: "power2.out" }, "toWeb+=1.5");
-  tl.add(() => { setActivePanel(panels[3]); setActiveDot(3); }, "toWeb+=2");
+  tl.to(panels[2], { opacity: 0, y: -30, duration: 2, ease: "power2.inOut" }, "toWeb");
+  tl.set(panels[2], { visibility: "hidden" }, "toWeb+=2");
+  tl.set(panels[3], { visibility: "visible", y: 30 }, "toWeb+=0.5");
+  tl.to(panels[3], { opacity: 1, y: 0, duration: 2, ease: "power2.out" }, "toWeb+=0.8");
+  tl.add(() => { setActivePanel(panels[3]); setActiveDot(3); }, "toWeb+=1");
 
   // ═══════════════════════════════════════
-  // PANEL 3 — WEB  (78 → 100)
+  // PANEL 3 — WEB  (44 → 56)
   // ═══════════════════════════════════════
-  tl.addLabel("web", 78);
+  tl.addLabel("web", 44);
 
-  tl.to(".svc-web .svc-eyebrow", { opacity: 0.8, y: 0, duration: 3, ease: "power2.out" }, "web+=1");
-  tl.to(".svc-web .svc-title", { opacity: 1, y: 0, duration: 4, ease: "power2.out" }, "web+=2");
-  tl.to(".svc-web .svc-lead", { opacity: 0.9, y: 0, duration: 3, ease: "power2.out" }, "web+=4");
-  tl.to(".svc-web .svc-block", { opacity: 1, y: 0, stagger: 1.2, duration: 3, ease: "power2.out" }, "web+=6");
-  tl.to(".svc-web .svc-benefits", { opacity: 1, y: 0, duration: 3, ease: "power2.out" }, "web+=9");
+  tl.to(".svc-web .svc-eyebrow", { opacity: 0.8, y: 0, duration: 2, ease: "power2.out" }, "web+=0.5");
+  tl.to(".svc-web .svc-title", { opacity: 1, y: 0, duration: 2.5, ease: "power2.out" }, "web+=1");
+  tl.to(".svc-web .svc-lead", { opacity: 0.9, y: 0, duration: 2, ease: "power2.out" }, "web+=2");
+  tl.to(".svc-web .svc-block", { opacity: 1, y: 0, stagger: 0.8, duration: 2, ease: "power2.out" }, "web+=3.5");
+  tl.to(".svc-web .svc-benefits", { opacity: 1, y: 0, duration: 2, ease: "power2.out" }, "web+=5.5");
 
-  tl.to(".web-browser", { opacity: 1, y: 0, duration: 3, ease: "power2.out" }, "web+=7");
+  tl.to(".web-browser", { opacity: 1, y: 0, duration: 2, ease: "power2.out" }, "web+=4");
   tl.to(".web-result", {
     opacity: 1,
     y: 0,
-    stagger: 1,
-    duration: 2.2,
+    stagger: 0.6,
+    duration: 1.5,
     ease: "power2.out"
-  }, "web+=9");
+  }, "web+=5.5");
   tl.to(".web-metric", {
     opacity: 1,
     y: 0,
-    stagger: 0.6,
-    duration: 2,
+    stagger: 0.4,
+    duration: 1.2,
     ease: "power2.out"
-  }, "web+=13");
+  }, "web+=8");
 
-  // Example — phrase-by-phrase reveal, like search results loading
   const webExample = new SplitText(".svc-web .svc-example-text", { type: "words" });
   gsap.set(webExample.words, { opacity: 0, y: 4 });
   tl.to(webExample.words, {
     opacity: 1,
     y: 0,
-    stagger: 0.09,
-    duration: 1.1,
+    stagger: 0.06,
+    duration: 0.8,
     ease: "power2.out"
-  }, "web+=16");
-  tl.to({}, { duration: 4 }, "web+=19");
+  }, "web+=10");
+  tl.to({}, { duration: 2 }, "web+=11.5");
 
   // ═══════════════════════════════════════
-  // TRANSITION → CTA  (100 → 105)
+  // TRANSITION → CTA  (56 → 58)
   // ═══════════════════════════════════════
-  tl.addLabel("toCta", 100);
+  tl.addLabel("toCta", 56);
 
-  // DUST DISSOLVE — everything in Web panel dissolves before exit
-  tl.to(".svc-web .svc-benefits", { opacity: 0, scale: 0.7, y: -12, filter: "blur(2px)", duration: 2, ease: "power2.in" }, "toCta+=1");
-  tl.to(".svc-web .svc-block", { opacity: 0, scale: 0.8, y: -10, filter: "blur(2px)", stagger: 0.5, duration: 2, ease: "power2.in" }, "toCta+=1.5");
-  tl.to(".svc-web .svc-lead", { opacity: 0, scale: 0.85, y: -8, filter: "blur(2px)", duration: 2, ease: "power2.in" }, "toCta+=2");
-  tl.to(".svc-web .svc-title", { opacity: 0, scale: 0.9, y: -6, filter: "blur(2px)", duration: 2, ease: "power2.in" }, "toCta+=2.5");
-  tl.to(".svc-web .svc-eyebrow", { opacity: 0, y: -6, filter: "blur(2px)", duration: 2, ease: "power2.in" }, "toCta+=3");
-  tl.to(".web-browser", { opacity: 0, scale: 0.7, y: -12, filter: "blur(3px)", duration: 2.5, ease: "power2.in" }, "toCta+=1");
-  tl.to(".web-result", { opacity: 0, scale: 0.6, y: -14, filter: "blur(3px)", stagger: 0.5, duration: 2, ease: "power2.in" }, "toCta+=1.5");
-  tl.to(".web-metric", { opacity: 0, scale: 0.5, y: -12, filter: "blur(3px)", stagger: 0.4, duration: 2, ease: "power2.in" }, "toCta+=2.5");
-  tl.to(webExample.words, { opacity: 0, y: -6, stagger: { each: 0.05, from: "end" }, duration: 1, ease: "power2.in" }, "toCta+=3");
-  tl.to(".svc-web .svc-example-text", { opacity: 0, filter: "blur(2px)", duration: 2, ease: "power2.in" }, "toCta+=3.2");
+  tl.to(".svc-web .svc-benefits", { opacity: 0, scale: 0.7, y: -12, filter: "blur(2px)", duration: 1.2, ease: "power2.in" }, "toCta+=0.3");
+  tl.to(".svc-web .svc-block", { opacity: 0, scale: 0.8, y: -10, filter: "blur(2px)", stagger: 0.3, duration: 1.2, ease: "power2.in" }, "toCta+=0.5");
+  tl.to(".svc-web .svc-lead", { opacity: 0, scale: 0.85, y: -8, filter: "blur(2px)", duration: 1.2, ease: "power2.in" }, "toCta+=0.7");
+  tl.to(".svc-web .svc-title", { opacity: 0, scale: 0.9, y: -6, filter: "blur(2px)", duration: 1.2, ease: "power2.in" }, "toCta+=0.9");
+  tl.to(".svc-web .svc-eyebrow", { opacity: 0, y: -6, filter: "blur(2px)", duration: 1, ease: "power2.in" }, "toCta+=1.1");
+  tl.to(".web-browser", { opacity: 0, scale: 0.7, y: -12, filter: "blur(3px)", duration: 1.5, ease: "power2.in" }, "toCta+=0.2");
+  tl.to(".web-result", { opacity: 0, scale: 0.6, y: -14, filter: "blur(3px)", stagger: 0.3, duration: 1.2, ease: "power2.in" }, "toCta+=0.5");
+  tl.to(".web-metric", { opacity: 0, scale: 0.5, y: -12, filter: "blur(3px)", stagger: 0.2, duration: 1.2, ease: "power2.in" }, "toCta+=0.8");
+  tl.to(webExample.words, { opacity: 0, y: -6, stagger: { each: 0.04, from: "end" }, duration: 0.8, ease: "power2.in" }, "toCta+=1");
+  tl.to(".svc-web .svc-example-text", { opacity: 0, filter: "blur(2px)", duration: 1, ease: "power2.in" }, "toCta+=1.2");
 
-  tl.to(panels[3], { opacity: 0, y: -30, duration: 3, ease: "power2.inOut" }, "toCta");
-  tl.set(panels[3], { visibility: "hidden" }, "toCta+=3");
+  tl.to(panels[3], { opacity: 0, y: -30, duration: 2, ease: "power2.inOut" }, "toCta");
+  tl.set(panels[3], { visibility: "hidden" }, "toCta+=2");
   if (cta) {
-    tl.set(cta, { visibility: "visible" }, "toCta+=1");
-    tl.to(cta, { opacity: 1, duration: 3, ease: "power2.out" }, "toCta+=1.5");
+    tl.set(cta, { visibility: "visible" }, "toCta+=0.5");
+    tl.to(cta, { opacity: 1, duration: 2, ease: "power2.out" }, "toCta+=0.8");
     tl.add(() => {
       setActivePanel(null);
       cta.classList.add("is-active");
       setActiveDot(-1);
-    }, "toCta+=2");
+    }, "toCta+=1");
   }
 
   // ═══════════════════════════════════════
-  // CTA  (105 → 115)
+  // CTA  (58 → 65)
   // ═══════════════════════════════════════
-  tl.addLabel("cta", 105);
-  tl.to(".svc-cta-title", { opacity: 1, y: 0, duration: 4, ease: "power2.out" }, "cta+=1");
-  tl.to(".svc-cta .cta-primary", { opacity: 1, y: 0, duration: 3, ease: "power2.out" }, "cta+=3");
-  tl.to(".svc-cta .contact-block", { opacity: 1, y: 0, duration: 3, ease: "power2.out" }, "cta+=5");
-  tl.to({}, { duration: 5 }, "cta+=8");
+  tl.addLabel("cta", 58);
+  tl.to(".svc-cta-title", { opacity: 1, y: 0, duration: 2.5, ease: "power2.out" }, "cta+=0.5");
+  tl.to(".svc-cta .cta-primary", { opacity: 1, y: 0, duration: 2, ease: "power2.out" }, "cta+=1.5");
+  tl.to(".svc-cta .contact-block", { opacity: 1, y: 0, duration: 2, ease: "power2.out" }, "cta+=3");
+  tl.to({}, { duration: 3 }, "cta+=5");
 
   // CTA pulse
   gsap.fromTo(".cta-primary",
@@ -457,15 +450,15 @@ function modulateShader(progress, tl) {
 
   const breaks = [
     { pos:  0, from: 0, to: 1 },
-    { pos:  8, from: 1, to: 1 },
-    { pos: 22, from: 1, to: 2 },
-    { pos: 26, from: 2, to: 2 },
-    { pos: 48, from: 2, to: 3 },
-    { pos: 52, from: 3, to: 3 },
-    { pos: 74, from: 3, to: 4 },
-    { pos: 78, from: 4, to: 4 },
-    { pos: 100, from: 4, to: 5 },
-    { pos: 105, from: 5, to: 5 },
+    { pos:  4, from: 1, to: 1 },
+    { pos: 14, from: 1, to: 2 },
+    { pos: 16, from: 2, to: 2 },
+    { pos: 28, from: 2, to: 3 },
+    { pos: 30, from: 3, to: 3 },
+    { pos: 42, from: 3, to: 4 },
+    { pos: 44, from: 4, to: 4 },
+    { pos: 56, from: 4, to: 5 },
+    { pos: 58, from: 5, to: 5 },
   ];
 
   let fromIdx = 0, toIdx = 0, blend = 0;

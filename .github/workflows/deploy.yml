@@ -22,14 +22,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/configure-pages@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
 
-      - name: Copy site to root
-        run: cp -r animation-page/* _site/
+      - name: Build site
+        run: |
+          mkdir -p _site
+          cp -r animation-page/* _site/
+          ls -la _site/
 
-      - uses: actions/upload-pages-artifact@v3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
           path: _site
 
-      - id: deployment
+      - name: Deploy
+        id: deployment
         uses: actions/deploy-pages@v4

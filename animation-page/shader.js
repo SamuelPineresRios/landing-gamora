@@ -222,31 +222,19 @@ function init() {
         for (int i = 0; i < 8; i++) {
           if (i >= n) break;
           float fi = float(i);
-          float sp = 0.35 + fi * 0.14;
-          float r = 0.12 + mod(fi, 3.0) * 0.06;
-          float orb = (0.3 + mod(fi, 3.0) * 0.16) * uMovementScale;
-          float ph = fi * PI * 0.35;
+          float r = 0.10 + mod(fi, 3.0) * 0.06;
+          float sx = 0.31 + fi * 0.07;
+          float sy = 0.37 + fi * 0.09;
+          float ax = 1.4 + mod(fi, 2.0) * 0.5;
+          float ay = 1.1 + mod(fi + 1.0, 2.0) * 0.4;
+          float px = fi * 1.4;
+          float py = fi * 2.1;
 
-          vec3 off;
-          if (i == 0) {
-            off = vec3(
-              sin(t * sp) * orb * 0.7,
-              sin(t * 0.5) * orb,
-              cos(t * sp * 0.7) * orb * 0.5
-            );
-          } else if (i == 1) {
-            off = vec3(
-              sin(t * sp + PI) * orb * 0.5,
-              -sin(t * 0.5) * orb,
-              cos(t * sp * 0.7 + PI) * orb * 0.5
-            );
-          } else {
-            off = vec3(
-              sin(t * sp + ph) * orb * 0.8,
-              cos(t * sp * 0.85 + ph * 1.3) * orb * 0.6,
-              sin(t * sp * 0.5 + ph) * 0.3
-            );
-          }
+          vec3 off = vec3(
+            sin(t * sx + px) * ax,
+            cos(t * sy + py) * ay,
+            sin(t * (sx + sy) * 0.4 + px) * 0.4
+          );
 
           vec3 toCursor = uCursorSphere - off;
           float cursorDist = length(toCursor);
@@ -450,6 +438,8 @@ function onTouchEnd(event) {
 function onPointerMove(event) {
   targetMousePosition.x = event.clientX / window.innerWidth;
   targetMousePosition.y = 1.0 - event.clientY / window.innerHeight;
+
+  if (isMobile) return;
 
   const normalizedX = targetMousePosition.x;
   const normalizedY = targetMousePosition.y;

@@ -114,9 +114,9 @@ export function initAutomation() {
     scrollTrigger: {
       trigger: section,
       start: "top top",
-      end: "+=1600%",
+      end: "+=900%",
       pin: true,
-      scrub: 0.6,
+      scrub: 0.3,
       anticipatePin: 1,
       onUpdate: (self) => {
         modulateShader(self.progress, tl);

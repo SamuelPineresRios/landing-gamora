@@ -407,9 +407,9 @@ function screenToWorldJS(normalizedX, normalizedY) {
 
 function setupEventListeners() {
   window.addEventListener("mousemove", onPointerMove, { passive: true });
-  window.addEventListener("touchstart", onTouchStart, { passive: false });
-  window.addEventListener("touchmove", onTouchMove, { passive: false });
-  window.addEventListener("touchend", onTouchEnd, { passive: false });
+  window.addEventListener("touchstart", onTouchStart, { passive: true });
+  window.addEventListener("touchmove", onTouchMove, { passive: true });
+  window.addEventListener("touchend", onTouchEnd, { passive: true });
   window.addEventListener("resize", onWindowResize, { passive: true });
   window.addEventListener(
     "orientationchange",
@@ -421,7 +421,6 @@ function setupEventListeners() {
 }
 
 function onTouchStart(event) {
-  event.preventDefault();
   if (event.touches.length > 0) {
     const touch = event.touches[0];
     onPointerMove({
@@ -432,7 +431,6 @@ function onTouchStart(event) {
 }
 
 function onTouchMove(event) {
-  event.preventDefault();
   if (event.touches.length > 0) {
     const touch = event.touches[0];
     onPointerMove({
@@ -443,7 +441,6 @@ function onTouchMove(event) {
 }
 
 function onTouchEnd(event) {
-  event.preventDefault();
 }
 
 function onPointerMove(event) {

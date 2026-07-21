@@ -92,6 +92,8 @@ function init() {
     height: 100vh !important;
     z-index: 0 !important;
     display: block !important;
+    pointer-events: none !important;
+    touch-action: none !important;
   `;
   container.appendChild(canvas);
 
@@ -369,6 +371,8 @@ function onWindowResize() {
     height: 100vh !important;
     z-index: 0 !important;
     display: block !important;
+    pointer-events: none !important;
+    touch-action: none !important;
   `;
 }
 

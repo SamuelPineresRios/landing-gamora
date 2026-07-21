@@ -1,1768 +1,347 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Batmobile: Gotham City Pursuit [DELAYED MOBILE]</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Share+Tech+Mono&display=swap');
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GamoraSystems</title>
+  <link rel="icon" type="image/png" href="logo_gamora_fondo_eliminado.png" />
 
-        body {
-            margin: 0;
-            overflow: hidden;
-            background-color: #000;
-            font-family: 'Share Tech Mono', monospace;
-            user-select: none;
-            -webkit-user-select: none;
-        }
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet" />
 
-        #canvas-container {
-            width: 100vw;
-            height: 100vh;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 1;
-        }
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/MotionPathPlugin.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Flip.min.js"></script>
 
-        .neo-glass {
-            background: rgba(255,255, 255, 0.15);
-            backdrop-filter: blur(10px) saturate(180%);
-            -webkit-backdrop-filter: blur(10px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.15);
-            border-radius: 4px;
-            color: #e0ffe0;
-        }
-
-        #ui-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 10;
-            pointer-events: none;
-            opacity: 1;
-        }
-
-        #top-hud {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 20px;
-            width: 90%;
-            justify-content: space-between;
-        }
-
-        .hud-panel { 
-            padding: 10px 20px; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            min-width: 100px; 
-        }
-        .hud-label { font-size: 10px; color: rgba(255, 255, 255, 0.8); letter-spacing: 2px; margin-bottom: 4px; text-shadow: 0 0 2px rgba(0,0,0,0.5); }
-        .hud-value { font-size: 28px; font-weight: bold; text-shadow: 0 0 10px rgba(0, 255, 65, 0.8); }
-
-        #life-panel {
-            position: absolute;
-            top: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 5px;
-            padding: 5px 15px;
-        }
-        .life-pip {
-            width: 15px;
-            height: 6px;
-            background: #00ff41;
-            box-shadow: 0 0 5px #00ff41;
-            transition: background 0.3s;
-        }
-        .life-pip.lost {
-            background: rgba(255, 0, 0, 0.2);
-            box-shadow: none;
-        }
-
-        #cheat-list {
-            position: absolute;
-            top: 50%;
-            right: 20px;
-            transform: translateY(-50%);
-            text-align: right;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            padding: 15px;
-            pointer-events: none;
-        }
-        .cheat-item {
-            color: #fff;
-            font-size: 11px;
-            letter-spacing: 1px;
-            text-shadow: 0 0 2px #000;
-        }
-        .cheat-code {
-            color: #ffff00;
-            font-weight: bold;
-            text-shadow: 0 0 5px rgba(255, 255, 0, 0.5);
-        }
-
-        #weapon-system {
-            position: absolute;
-            bottom: 30px;
-            right: 30px;
-            text-align: right;
-            transform: skewX(-10deg);
-            padding: 15px;
-        }
-        .ammo-pip {
-            display: inline-block;
-            width: 10px;
-            height: 20px;
-            background: #00ff41;
-            margin-left: 3px;
-            box-shadow: 0 0 5px #00ff41;
-            transition: 0.2s;
-        }
-        .ammo-pip.empty { background: rgba(0,0,0,0.3); box-shadow: none; }
-
-        #dashboard {
-            position: absolute;
-            bottom: 30px;
-            left: 30px;
-            display: flex;
-            align-items: flex-end;
-            gap: 15px;
-            padding: 15px;
-        }
-        .gauge-circle {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-top: 3px solid #00ff41;
-            border-right: 3px solid #00ff41;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transform: rotate(-45deg);
-        }
-        .gauge-inner { transform: rotate(45deg); text-align: center; }
-
-        #nitro-bar-container {
-            width: 250px;
-            height: 10px;
-            background: rgba(0,0,0,0.3);
-            border: 1px solid #00ff41;
-            transform: skewX(-20deg);
-            margin-bottom: 8px;
-            position: relative;
-            overflow: hidden;
-        }
-        #nitro-fill {
-            height: 100%;
-            width: 100%;
-            background: linear-gradient(90deg, #004d00, #00ff41, #fff);
-            transform-origin: left;
-            transition: transform 0.1s;
-        }
-
-        #mobile-controls {
-            display: none;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 180px;
-            pointer-events: none;
-            z-index: 20;
-            opacity: 0;
-            transform: translateY(50px);
-            animation: slideUpFade 0.8s ease-out 4s forwards;
-        }
-
-        @keyframes slideUpFade {
-            0% { opacity: 0; transform: translateY(50px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        .mobile-btn {
-            position: absolute;
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(5px);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: #fff;
-            font-family: 'Share Tech Mono';
-            pointer-events: none;
-            user-select: none;
-            touch-action: manipulation;
-            box-shadow: 0 0 15px rgba(0,0,0,0.5);
-        }
-
-        .mobile-btn:active {
-            background: rgba(0, 255, 65, 0.4);
-            transform: scale(0.95);
-        }
-
-        .btn-left { bottom: 40px; left: 30px; }
-        .btn-right { bottom: 40px; left: 130px; }
-        .btn-boost { bottom: 40px; right: 130px; width: 90px; height: 90px; border-radius: 50%; color: #00ffff; }
-        .btn-fire { bottom: 40px; right: 30px; width: 70px; height: 70px; border-radius: 50%; border-color: #ff0055; color: #ff0055; }
-
-        #mobile-cheat-trigger {
-            display: none;
-            position: absolute;
-            top: 100px;
-            right: 20px;
-            padding: 10px 20px;
-            font-size: 12px;
-            pointer-events: none;
-            z-index: 30;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: slideUpFade 0.8s ease-out 4s forwards;
-        }
-
-        #mobile-cheat-panel {
-            display: none;
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 100;
-            background: rgba(0,0,0,0.85);
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            pointer-events: auto;
-        }
-        #mobile-cheat-input {
-            background: rgba(0,0,0,0.5);
-            border: 2px solid #00ff41;
-            color: #00ff41;
-            padding: 15px;
-            font-size: 20px;
-            font-family: 'Share Tech Mono';
-            width: 80%;
-            max-width: 400px;
-            text-transform: uppercase;
-            text-align: center;
-            outline: none;
-        }
-        .close-cheat {
-            margin-top: 20px;
-            background: transparent;
-            border:1px solid #fff;
-            color: #fff;
-            padding: 10px 30px;
-            font-family: 'Share Tech Mono';
-        }
-
-        @media (max-width: 1024px) {
-            #mobile-controls { display: block; }
-            #mobile-cheat-trigger { display: block; }
-            #cheat-list { display: none; }
-            #dashboard { transform: scale(0.8); bottom: 10px; left: 10px; }
-            #weapon-system { transform: scale(0.8); bottom: 10px; right: 10px; }
-        }
-
-        .vignette {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.9) 100%);
-            z-index: 5;
-            pointer-events: none;
-        }
-        .scanlines {
-            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
-            background-size: 100% 4px;
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            z-index: 6;
-            pointer-events: none;
-            opacity: 0.4;
-        }
-        
-        .toast {
-            position: absolute;
-            top: 20%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            padding: 20px 40px;
-            font-size: 24px;
-            opacity: 0;
-            transition: opacity 0.5s;
-            text-shadow: 0 0 10px currentColor;
-            z-index: 200;
-            pointer-events: none;
-            text-align: center;
-        }
-        .warning-text { color: #ff0055; text-shadow: 0 0 20px #ff0055; font-size: 32px; font-weight: bold; display: none; }
-        
-        #cheat-indicator {
-            position: absolute;
-            bottom: 120px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #000;
-            font-size: 14px;
-            font-weight: bold;
-            opacity: 0;
-            transition: opacity 0.5s;
-            text-shadow: 0 0 5px #fff;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 5px 10px;
-            border: 1px solid #fff;
-            pointer-events: none;
-            white-space: nowrap;
-            box-shadow: 0 0 15px #fff;
-        }
-
-        #game-timer {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            color: #fff;
-            font-size: 12px;
-            border: 1px solid rgba(255,255,255,0.5);
-            padding: 5px 10px;
-            background: rgba(0,0,0,0.3);
-            text-shadow: 0 0 5px rgba(0,255,65,0.5);
-        }
-
-        #game-over-screen {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.05); 
-            backdrop-filter: blur(10px);
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 300;
-            pointer-events: all;
-        }
-        .go-title {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 60px;
-            color: #ff0055;
-            text-shadow: 0 0 30px rgba(255, 0, 85, 0.8);
-            margin-bottom: 20px;
-            transform: skewX(-10deg);
-            text-align: center;
-        }
-        
-        .restart-btn {
-            padding: 20px 60px;
-            color: #fff;
-            border: none;
-            font-family: 'Share Tech Mono';
-            font-size: 24px;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            transition: 0.3s;
-            text-shadow: 0 0 10px #000;
-            pointer-events: auto;
-        }
-        .restart-btn:hover {
-            background: rgba(255, 255, 255, 0.4); 
-            color: #000;
-            text-shadow: none;
-            box-shadow: 0 0 20px rgba(255,255,255,0.5);
-        }
-
-    </style>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-    <div id="canvas-container"></div>
-    <div class="vignette"></div>
-    <div class="scanlines"></div>
+  <div id="container"></div>
+  <div id="stats"></div>
+  <div id="ui-container"></div>
 
-    <div id="ui-layer">
-        <div id="top-hud">
-            <div class="hud-panel neo-glass">
-                <div class="hud-label">DISTANCE</div>
-                <div class="hud-value" id="score-val">0</div>
+  <!-- HERO -->
+  <section class="section hero-section">
+    <div class="header-area">
+      <div class="logo-container">
+        <img src="logo_gamora_fondo_eliminado.png" alt="Gamora Systems" class="logo-img" />
+      </div>
+      <div class="center-logo">
+        <h1 id="logo-text">Gamora<span class="logo-text-systems">Systems.</span></h1>
+      </div>
+    </div>
+
+    <div class="hero">
+      <h1>
+        Automatizamos<br>
+        procesos, <span class="logo-text-systems" id="hero-cycle-word">impulsamos</span><br>
+        <span class="logo-text-systems" id="hero-cycle-suffix">resultados</span>.
+      </h1>
+      <h2 id="story-text">
+        Centralizamos tu empresa con ERP, automatizamos procesos, creamos páginas web y te damos un POS para vender. Todo en un solo sistema, para Pymes que quieren crecer sin complicarse.
+      </h2>
+    </div>
+
+    <div class="contact-info">
+      <p class="contact-heading">+Hablemos de tu proyecto</p>
+      <span class="contact-email">contacto@gamorasystems.com</span>
+    </div>
+
+    <button class="hamburger-btn" id="hamburger-btn" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="mobile-menu" id="mobile-menu">
+      <a href="#svc-auto">Automatización</a>
+      <a href="#svc-erp">ERP Empresarial</a>
+      <a href="#svc-ia">Inteligencia Artificial</a>
+      <a href="#svc-web">Desarrollo Web</a>
+      <a href="#contacto">Contáctanos</a>
+    </nav>
+
+    <div class="footer-links">
+      <a href="#svc-auto" class="footer-link">Automatización</a>
+      <a href="#svc-erp" class="footer-link">ERP Empresarial</a>
+      <a href="#svc-ia" class="footer-link">Inteligencia Artificial</a>
+      <a href="#svc-web" class="footer-link">Desarrollo Web</a>
+      <a href="#contacto" class="footer-link">Contáctanos</a>
+    </div>
+  </section>
+
+  <!-- SERVICES — 4 pinned scrolls -->
+  <section class="section services-section" id="services" aria-label="Nuestros servicios">
+    <div class="services-stage">
+
+      <!-- progress rail -->
+      <div class="svc-rail" aria-hidden="true">
+        <span class="svc-rail-dot" data-svc="0"></span>
+        <span class="svc-rail-dot" data-svc="1"></span>
+        <span class="svc-rail-dot" data-svc="2"></span>
+        <span class="svc-rail-dot" data-svc="3"></span>
+      </div>
+
+      <!-- ═══ 01 AUTOMATIZACIÓN ═══ -->
+      <article class="svc-panel svc-auto is-active" id="svc-auto" data-svc="0">
+        <div class="svc-layout">
+          <div class="svc-copy">
+            <p class="svc-eyebrow">01 / 04 · Automatización</p>
+            <h2 class="svc-title">Las tareas repetitivas<br><span class="cyan">ya no las hace tu equipo.</span></h2>
+            <p class="svc-lead">Enseñamos al sistema a hacer lo que hoy hace tu equipo: copiar datos, enviar correos, crear facturas, notificar.</p>
+
+            <div class="svc-block">
+              <p class="svc-label">El problema</p>
+              <p class="svc-text">Tu equipo pierde horas copiando datos, reenviando correos y armando cotizaciones. Cada paso manual es un error en espera.</p>
             </div>
-            <div class="hud-panel neo-glass">
-                <div class="hud-label">SYSTEM</div>
-                <div class="hud-value" id="status-val" style="font-size: 18px; color:#00ff41;">ONLINE</div>
+
+            <div class="svc-block">
+              <p class="svc-label">Cómo lo resolvemos</p>
+              <p class="svc-text">Conectamos tus herramientas en flujos automáticos: cuando ocurre A, el sistema ejecuta B, C y D sin intervención.</p>
             </div>
+
+            <ul class="svc-benefits">
+              <li>Menos errores</li>
+              <li>Menos horas perdidas</li>
+              <li>Más productividad</li>
+              <li>Crecer sin contratar de más</li>
+            </ul>
+          </div>
+
+          <div class="svc-visual" aria-hidden="true">
+            <div class="flow-board">
+              <div class="flow-node" data-step="0"><span><span class="cyan">Formulario</span> recibido</span></div>
+              <div class="flow-pipe" data-pipe="0"></div>
+              <div class="flow-node" data-step="1"><span><span class="cyan">Cliente</span> creado</span></div>
+              <div class="flow-pipe" data-pipe="1"></div>
+              <div class="flow-node" data-step="2"><span><span class="cyan">Factura</span> generada</span></div>
+              <div class="flow-pipe" data-pipe="2"></div>
+              <div class="flow-node" data-step="3"><span><span class="cyan">Correo</span> enviado</span></div>
+              <div class="flow-pipe" data-pipe="3"></div>
+              <div class="flow-node" data-step="4"><span><span class="cyan">Equipo</span> notificado</span></div>
+            </div>
+            <div class="svc-example">
+              <span class="svc-label">Así funciona en la práctica</span>
+                <p class="svc-example-text">Un cliente llena tu <span class="cyan">formulario</span>. A las <span class="cyan">9:03 AM</span> el sistema ya
+               <span class="cyan">creó su perfil</span>, generó la <span class="cyan">factura #1247</span>,
+               <span class="cyan">descontó inventario</span> y <span class="cyan">avisó a logística</span>. <span class="cyan">Tu equipo solo ejecuta.</span></p>
+            </div>
+          </div>
         </div>
+      </article>
 
-        <div id="life-panel" class="neo-glass">
-            <div class="life-pip"></div><div class="life-pip"></div><div class="life-pip"></div>
-            <div class="life-pip"></div><div class="life-pip"></div><div class="life-pip"></div>
+      <!-- ═══ 02 ERP ═══ -->
+      <article class="svc-panel svc-erp" id="svc-erp" data-svc="1">
+        <div class="svc-layout">
+          <div class="svc-copy">
+            <p class="svc-eyebrow">02 / 04 · ERP Empresarial</p>
+            <h2 class="svc-title">Todo tu negocio<br><span class="cyan">en un solo lugar.</span></h2>
+            <p class="svc-lead">El tablero de control de tu empresa: ventas, inventario, clientes, finanzas — todo conectado, no en carpetas sueltas.</p>
+
+            <div class="svc-block">
+              <p class="svc-label">El problema</p>
+              <p class="svc-text">Tu información está dispersa en Excel, WhatsApp y libretas. Nadie tiene el panorama completo y las pérdidas se esconden.</p>
+            </div>
+
+            <div class="svc-block">
+              <p class="svc-label">Cómo lo resolvemos</p>
+              <p class="svc-text">Centralizamos todo en un solo sistema: una acción actualiza el resto automáticamente.</p>
+            </div>
+
+            <ul class="svc-benefits">
+              <li>Información centralizada</li>
+              <li>Decisiones más rápidas</li>
+              <li>Menos pérdidas</li>
+              <li>Control real del negocio</li>
+            </ul>
+          </div>
+
+          <div class="svc-visual" aria-hidden="true">
+            <div class="erp-dash">
+              <div class="erp-card" data-mod="ventas">
+                <span class="erp-card-k">Ventas</span>
+                <span class="erp-card-v"><span class="cyan">$128.4k</span></span>
+                <span class="erp-card-d up">+12%</span>
+              </div>
+              <div class="erp-card" data-mod="stock">
+                <span class="erp-card-k">Inventario</span>
+                <span class="erp-card-v"><span class="cyan">1.842</span></span>
+                <span class="erp-card-d">unidades</span>
+              </div>
+              <div class="erp-card" data-mod="clientes">
+                <span class="erp-card-k">Clientes</span>
+                <span class="erp-card-v"><span class="cyan">364</span></span>
+                <span class="erp-card-d up">+8 hoy</span>
+              </div>
+              <div class="erp-card" data-mod="finanzas">
+                <span class="erp-card-k">Finanzas</span>
+                <span class="erp-card-v"><span class="cyan">OK</span></span>
+                <span class="erp-card-d">al día</span>
+              </div>
+              <div class="erp-modules">
+                <span>Ventas</span><span>Inventario</span><span>Compras</span>
+                <span>Clientes</span><span>Proveedores</span><span>Empleados</span>
+                <span>Finanzas</span><span>Reportes</span>
+              </div>
+            </div>
+            <div class="svc-example">
+              <span class="svc-label">Así funciona en la práctica</span>
+                <p class="svc-example-text">Vendiste <span class="cyan">SKU-8842</span>. <span class="cyan">Al instante</span>: inventario
+               <span class="cyan">actualizado</span>, <span class="cyan">factura emitida</span>,
+               historial del cliente al día y finanzas sincronizadas.
+               <span class="cyan">Sin llamar a nadie.</span></p>
+            </div>
+          </div>
         </div>
+      </article>
 
-        <div id="game-timer">TIME: <span id="time-val">0.0</span>s</div>
+      <!-- ═══ 03 IA ═══ -->
+      <article class="svc-panel svc-ia" id="svc-ia" data-svc="2">
+        <div class="svc-layout">
+          <div class="svc-copy">
+            <p class="svc-eyebrow">03 / 04 · Inteligencia Artificial</p>
+            <h2 class="svc-title">Un agente que atiende,<br><span class="cyan">registra y da seguimiento.</span></h2>
+            <p class="svc-lead">Un agente entrenado en tu negocio que conecta WhatsApp con tu inventario, CRM y hojas de cálculo.</p>
 
-        <div id="cheat-list" class="neo-glass">
-            <div class="cheat-item">GOD MODE: <span class="cheat-code">WAYNE</span></div>
-            <div class="cheat-item">INF NITRO: <span class="cheat-code">GOTHAM</span></div>
-            <div class="cheat-item">CHAOS: <span class="cheat-code">JOKER</span></div>
-        </div>
+            <div class="svc-block">
+              <p class="svc-label">El problema</p>
+              <p class="svc-text">Mensajes sin responder, cotizaciones perdidas, seguimiento olvidado. El cliente se va con tu competencia.</p>
+            </div>
 
-        <div id="dashboard" class="neo-glass">
-            <div class="gauge-circle">
-                <div class="gauge-inner">
-                    <div id="speed-val" class="hud-value">0</div>
-                    <div class="hud-label">MPH</div>
+            <div class="svc-block">
+              <p class="svc-label">Cómo lo resolvemos</p>
+              <p class="svc-text">Responde, consulta stock, agenda citas y da seguimiento — 24/7, sin descanso.</p>
+            </div>
+
+            <ul class="svc-benefits">
+              <li>Atención inmediata</li>
+              <li>Ahorro de horas diarias</li>
+              <li>Menos tareas repetitivas</li>
+              <li>Mejor experiencia al cliente</li>
+            </ul>
+          </div>
+
+          <div class="svc-visual" aria-hidden="true">
+            <div class="ia-hub">
+              <div class="ia-arena">
+                <div class="ia-core"><span>IA</span></div>
+                <div class="ia-orbit">
+                  <span class="ia-node" style="--i:0"><span class="cyan">WhatsApp</span></span>
+                  <span class="ia-node" style="--i:1">CRM</span>
+                  <span class="ia-node" style="--i:2"><span class="cyan">ERP</span></span>
+                  <span class="ia-node" style="--i:3">Sheets</span>
+                  <span class="ia-node" style="--i:4"><span class="cyan">Inventario</span></span>
+                  <span class="ia-node" style="--i:5">Agenda</span>
                 </div>
+              </div>
+              <div class="ia-chat">
+                <div class="ia-msg in">¿Tienen stock del modelo X?</div>
+                <div class="ia-msg out">Sí, <span class="cyan">14 unidades</span>. ¿Te armo la <span class="cyan">cotización</span>?</div>
+                <div class="ia-msg out">Listo. Te la <span class="cyan">envié</span> y <span class="cyan">agendé seguimiento</span>.</div>
+              </div>
             </div>
-            <div>
-                <div class="hud-label" style="margin-left:5px;">AFTERBURNER</div>
-                <div id="nitro-bar-container">
-                    <div id="nitro-fill"></div>
+            <div class="svc-example">
+              <span class="svc-label">Así funciona en la práctica</span>
+                <p class="svc-example-text"><span class="cyan">11 PM</span>. Cliente escribe <span class="cyan">por WhatsApp</span>.
+               La IA <span class="cyan">revisa inventario</span>, confirma
+               <span class="cyan">14 unidades</span>, <span class="cyan">arma la cotización</span>
+               y <span class="cyan">agenda seguimiento</span>.
+               <span class="cyan">Todo resuelto mientras duermes.</span></p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- ═══ 04 WEB ═══ -->
+      <article class="svc-panel svc-web" id="svc-web" data-svc="3">
+        <div class="svc-layout">
+          <div class="svc-copy">
+            <p class="svc-eyebrow">04 / 04 · Desarrollo Web</p>
+            <h2 class="svc-title">Una web que te trae<br><span class="cyan">clientes, no solo visitas.</span></h2>
+            <p class="svc-lead">Diagnosticamos tu negocio y diseñamos una web pensada para posicionarse en Google y convertir visitas en clientes.</p>
+
+            <div class="svc-block">
+              <p class="svc-label">El problema</p>
+              <p class="svc-text">Tu competencia rankea primero. Tu sitio es lento, no se ve bien en celular y no deja claro qué haces.</p>
+            </div>
+
+            <div class="svc-block">
+              <p class="svc-label">Cómo lo resolvemos</p>
+              <p class="svc-text">Diagnóstico, SEO, velocidad, diseño responsive, contenido. Que te encuentren y te elijan.</p>
+            </div>
+
+            <ul class="svc-benefits">
+              <li>Más clientes</li>
+              <li>Mayor confianza</li>
+              <li>Mejor posición en Google</li>
+              <li>Más ventas</li>
+            </ul>
+          </div>
+
+          <div class="svc-visual" aria-hidden="true">
+            <div class="web-browser">
+              <div class="web-chrome">
+                <span class="web-dot"></span><span class="web-dot"></span><span class="web-dot"></span>
+                <div class="web-url">google.com/search?q=tu+servicio</div>
+              </div>
+              <div class="web-results">
+                <div class="web-result top">
+                  <span class="web-rank">1</span>
+                  <div>
+                    <p class="web-r-title">Tu Empresa — Servicio profesional</p>
+                    <p class="web-r-url">tuempresa.com</p>
+                    <p class="web-r-desc">La solución que buscabas. Cotiza en minutos.</p>
+                  </div>
                 </div>
+                <div class="web-result">
+                  <span class="web-rank">2</span>
+                  <div>
+                    <p class="web-r-title">Competidor A</p>
+                    <p class="web-r-url">competidor-a.com</p>
+                  </div>
+                </div>
+                <div class="web-result">
+                  <span class="web-rank">3</span>
+                  <div>
+                    <p class="web-r-title">Competidor B</p>
+                    <p class="web-r-url">competidor-b.com</p>
+                  </div>
+                </div>
+              </div>
+              <div class="web-metrics">
+                <div class="web-metric"><span class="wm-v">0.9s</span><span class="wm-k">carga</span></div>
+                <div class="web-metric"><span class="wm-v">98</span><span class="wm-k">SEO</span></div>
+                <div class="web-metric"><span class="wm-v"><span class="cyan">100%</span></span><span class="wm-k">móvil</span></div>
+              </div>
             </div>
-        </div>
-
-        <div id="weapon-system" class="neo-glass">
-            <div class="hud-label">BATARANG</div>
-            <div id="ammo-container" style="margin-top: 5px;">
-                <span class="ammo-pip"></span><span class="ammo-pip"></span><span class="ammo-pip"></span>
+            <div class="svc-example">
+              <span class="svc-label">Así funciona en la práctica</span>
+                <p class="svc-example-text">Buscan <span class="cyan">"servicio de [tu rubro]"</span>
+               en Google. Apareces <span class="cyan">primero</span>.
+               Tu sitio carga en <span class="cyan">0.9s</span>, se ve perfecto en celular
+               y <span class="cyan">convierte la visita en cliente</span>.
+               <span class="cyan">Sin pagar anuncios.</span></p>
             </div>
+          </div>
         </div>
+      </article>
 
-        <div id="cheat-indicator">CHEAT ACTIVATED</div>
-        <div class="toast warning-text" id="collision-warn">IMPACT DETECTED</div>
+      <!-- CTA cierre -->
+      <div class="svc-cta" id="contacto">
+        <h2 class="svc-title svc-cta-title">¿Listo para dejar de hacer<br><span class="cyan">a mano lo que puede ser automático?</span></h2>
+        <a href="mailto:contacto@gamorasystems.com" class="cta-primary">
+          Hablemos de tu proyecto
+          <span class="cta-arrow" aria-hidden="true">→</span>
+        </a>
+        <div class="contact-block">
+          <p class="contact-heading">+Hablemos de tu proyecto</p>
+          <span class="contact-email">contacto@gamorasystems.com</span>
+        </div>
+      </div>
+
     </div>
+  </section>
 
-    <button id="mobile-cheat-trigger" class="neo-glass">CHEAT</button>
-    
-    <div id="mobile-cheat-panel">
-        <div class="hud-label" style="margin-bottom:10px;">TYPE CHEAT CODE</div>
-        <input type="text" id="mobile-cheat-input" placeholder="WAYNE / GOTHAM / JOKER">
-        <button class="close-cheat" id="close-mobile-cheat">CLOSE</button>
-    </div>
-
-    <div id="mobile-controls">
-        <div class="mobile-btn btn-left" id="mob-left">&lt;</div>
-        <div class="mobile-btn btn-right" id="mob-right">&gt;</div>
-        <div class="mobile-btn btn-boost" id="mob-boost">NITRO</div>
-        <div class="mobile-btn btn-fire" id="mob-fire">FIRE</div>
-    </div>
-
-    <div id="game-over-screen">
-        <div class="go-title">CRITICAL FAILURE</div>
-        <p style="color:#fff; font-family:'Share Tech Mono'; margin-bottom:30px;">HULL INTEGRITY ZERO</p>
-        <button class="restart-btn neo-glass" id="restart-btn">REBOOT SYSTEM</button>
-    </div>
-
-    <script>
-        // ============== CONFIG & STATE ==============
-        const CONFIG = {
-            laneWidth: 3.5,
-            speed: { base: 0.5, max: 1.2, nitro: 2.2, current: 0.8 },
-            nitro: { amount: 100, drain: 0.35, regen: 0.15 },
-            camera: { shake: 0, fovBase: 70, fovNitro: 100 },
-            cheats: { god: false, infinite: false, chaos: false }
-        };
-
-        const STATE = {
-            playing: true,
-            gameOver: false,
-            score: 0,
-            lives: 6,
-            frame: 0,
-            batarangs: 3,
-            cheatBuffer: "",
-            randomCheatTriggered: false,
-            startTime: 0,
-            playerRoadDist: 0
-        };
-
-        let activeCheatTimers = { god: null, infinite: null, chaos: null };
-
-        // ============== THREE.JS SETUP ==============
-        const container = document.getElementById('canvas-container');
-        const scene = new THREE.Scene();
-        scene.fog = new THREE.FogExp2(0x020205, 0.006);
-
-        const camera = new THREE.PerspectiveCamera(CONFIG.camera.fovBase, window.innerWidth/window.innerHeight, 0.1, 1000);
-        camera.position.set(0, 3.5, 9);
-
-        const renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: "high-performance" });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-        renderer.toneMapping = THREE.ReinhardToneMapping;
-        container.appendChild(renderer.domElement);
-
-        // ============== POST PROCESSING ==============
-        const renderScene = new THREE.RenderPass(scene, camera);
-        const bloomPass = new THREE.UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85);
-        bloomPass.strength = 2.0;
-        bloomPass.radius = 0.6;
-        bloomPass.threshold = 0.15;
-
-        const composer = new THREE.EffectComposer(renderer);
-        composer.addPass(renderScene);
-        composer.addPass(bloomPass);
-
-        // ============== LIGHTING ==============
-        const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
-        scene.add(ambientLight);
-        const zoneAmbient = { current: 0x404040, target: 0x404040, intensity: 0.4, targetIntensity: 0.4 };
-
-        const dirLight = new THREE.DirectionalLight(0x110022, 0.8);
-        dirLight.position.set(10, 20, 10);
-        scene.add(dirLight);
-
-        const zoneLight = new THREE.PointLight(0xffaa00, 0, 60);
-        zoneLight.position.set(0, 15, 0);
-        scene.add(zoneLight);
-
-        // ============== MATERIALS ==============
-        const roadMat = new THREE.MeshStandardMaterial({ color: 0x0a0a0a, roughness: 0.1, metalness: 0.9 });
-        const bridgeRoadMat = new THREE.MeshStandardMaterial({ color: 0x1a1a2e, roughness: 0.3, metalness: 0.95 });
-        const tunnelRoadMat = new THREE.MeshStandardMaterial({ color: 0x050510, roughness: 0.2, metalness: 0.8 });
-        const neonBlue = new THREE.MeshBasicMaterial({ color: 0x00ffff });
-        const neonRed = new THREE.MeshBasicMaterial({ color: 0xff0033 });
-        const neonGreen = new THREE.MeshBasicMaterial({ color: 0x00ff41 });
-        const streetLightMat = new THREE.MeshBasicMaterial({ color: 0xffaa00 });
-        const headlightMat = new THREE.MeshBasicMaterial({ color: 0xffffcc });
-        const carPaintMat = new THREE.MeshStandardMaterial({ color: 0x0033cc, roughness: 0.3, metalness: 0.7 });
-        const tireMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.9, metalness: 0.1 });
-        const bridgeMetalMat = new THREE.MeshStandardMaterial({ color: 0x334455, roughness: 0.4, metalness: 0.9 });
-        const tunnelWallMat = new THREE.MeshStandardMaterial({ color: 0x111122, roughness: 0.3, metalness: 0.7 });
-        const tunnelLEDMat = new THREE.MeshBasicMaterial({ color: 0x00ffff });
-        const tunnelEmergMat = new THREE.MeshBasicMaterial({ color: 0xff0033 });
-
-        // ============== ROAD PATH SYSTEM ==============
-        const PATH = {
-            points: [],
-            step: 8,
-            generatedTo: 0,
-            x: 0, y: 0, angle: 0,
-            chunkRemaining: 0,
-            chunkType: 'straight',
-            chunkCurve: 0,
-            chunkSlope: 0,
-            bridgeRemaining: 0,
-            tunnelRemaining: 0,
-            featureCooldown: 20,
-
-            init: function() {
-                this.points = [];
-                this.x = 0; this.y = 0; this.angle = 0;
-                this.chunkRemaining = 0;
-                this.bridgeRemaining = 0;
-                this.tunnelRemaining = 0;
-                this.featureCooldown = 20;
-                this.generatedTo = 0;
-                this.generateTo(2000);
-            },
-
-            generateTo: function(targetDist) {
-                while (this.generatedTo < targetDist) {
-                    this._advance();
-                    this.generatedTo += this.step;
-                }
-            },
-
-            _advance: function() {
-                let curve = 0, slope = 0, type = 'city';
-
-                if (this.bridgeRemaining > 0) {
-                    this.bridgeRemaining--;
-                    type = 'bridge';
-                    curve = 0;
-                    if (this.bridgeRemaining === 0) this.featureCooldown = 25 + Math.floor(Math.random() * 20);
-                } else if (this.tunnelRemaining > 0) {
-                    this.tunnelRemaining--;
-                    type = 'tunnel';
-                    curve = 0;
-                    if (this.tunnelRemaining === 0) this.featureCooldown = 20 + Math.floor(Math.random() * 15);
-                } else {
-                    if (this.chunkRemaining <= 0) {
-                        this._pickChunk();
-                    }
-                    this.chunkRemaining--;
-                    curve = this.chunkCurve;
-                    slope = this.chunkSlope;
-                    type = this.chunkType === 'bridge' ? 'bridge' : (this.chunkType === 'tunnel' ? 'tunnel' : 'city');
-
-                    if (this.chunkRemaining <= 0 && this.featureCooldown <= 0 && type === 'city') {
-                        const r = Math.random();
-                        if (r < 0.06 && this.bridgeRemaining === 0 && this.tunnelRemaining === 0) {
-                            this.bridgeRemaining = 4 + Math.floor(Math.random() * 4);
-                            this.featureCooldown = 30;
-                            type = 'bridge';
-                        } else if (r < 0.12 && this.bridgeRemaining === 0 && this.tunnelRemaining === 0) {
-                            this.tunnelRemaining = 3 + Math.floor(Math.random() * 3);
-                            this.featureCooldown = 25;
-                            type = 'tunnel';
-                        }
-                    }
-                }
-
-                if (this.featureCooldown > 0 && this.bridgeRemaining === 0 && this.tunnelRemaining === 0) {
-                    this.featureCooldown--;
-                }
-
-                this.angle += curve;
-                this.angle = Math.max(-0.45, Math.min(0.45, this.angle));
-
-                this.x += Math.sin(this.angle) * this.step;
-                this.y += slope;
-                this.y = Math.max(-6, Math.min(12, this.y));
-
-                const z = this.generatedTo;
-                this.points.push({
-                    x: this.x, y: this.y, z: z,
-                    angle: this.angle,
-                    slope: slope / this.step,
-                    type: type
-                });
-            },
-
-            _pickChunk: function() {
-                const r = Math.random();
-                if (r < 0.30) {
-                    this.chunkType = 'straight';
-                    this.chunkCurve = 0;
-                    this.chunkSlope = 0;
-                    this.chunkRemaining = 6 + Math.floor(Math.random() * 12);
-                } else if (r < 0.48) {
-                    this.chunkType = 'curve_left';
-                    this.chunkCurve = 0.01 + Math.random() * 0.03;
-                    this.chunkSlope = 0;
-                    this.chunkRemaining = 8 + Math.floor(Math.random() * 12);
-                } else if (r < 0.66) {
-                    this.chunkType = 'curve_right';
-                    this.chunkCurve = -(0.01 + Math.random() * 0.03);
-                    this.chunkSlope = 0;
-                    this.chunkRemaining = 8 + Math.floor(Math.random() * 12);
-                } else if (r < 0.78) {
-                    this.chunkType = 'scurve';
-                    this.chunkCurve = (Math.random() > 0.5 ? 1 : -1) * (0.02 + Math.random() * 0.03);
-                    this.chunkSlope = 0;
-                    this.chunkRemaining = 10 + Math.floor(Math.random() * 10);
-                } else if (r < 0.88) {
-                    this.chunkType = 'uphill';
-                    this.chunkCurve = (Math.random() - 0.5) * 0.015;
-                    this.chunkSlope = 0.15 + Math.random() * 0.35;
-                    this.chunkRemaining = 6 + Math.floor(Math.random() * 8);
-                } else {
-                    this.chunkType = 'downhill';
-                    this.chunkCurve = (Math.random() - 0.5) * 0.015;
-                    this.chunkSlope = -(0.15 + Math.random() * 0.35);
-                    this.chunkRemaining = 6 + Math.floor(Math.random() * 8);
-                }
-            },
-
-            getInfo: function(dist) {
-                if (dist < 0) {
-                    const p0 = this.points[0] || { x:0, y:0, z:0, angle:0, slope:0, type:'city' };
-                    const p1 = this.points[1] || p0;
-                    const dz = p1.z - p0.z || this.step;
-                    return {
-                        x: p0.x + (p1.x - p0.x) * (dist / dz),
-                        y: p0.y + (p1.y - p0.y) * (dist / dz),
-                        z: dist,
-                        angle: p0.angle,
-                        slope: p0.slope,
-                        type: p0.type
-                    };
-                }
-                this.generateTo(dist + 200);
-                const idx = Math.floor(dist / this.step);
-                if (idx >= this.points.length - 1) return this.points[this.points.length - 1];
-                const p0 = this.points[idx];
-                const p1 = this.points[idx + 1];
-                const frac = (dist - idx * this.step) / this.step;
-                return {
-                    x: p0.x + (p1.x - p0.x) * frac,
-                    y: p0.y + (p1.y - p0.y) * frac,
-                    z: p0.z + (p1.z - p0.z) * frac,
-                    angle: p0.angle + (p1.angle - p0.angle) * frac,
-                    slope: p0.slope,
-                    type: p0.type
-                };
-            },
-
-            trim: function(minDist) {
-                while (this.points.length > 500 && this.points[0].z < minDist - 500) {
-                    this.points.shift();
-                }
-            },
-
-            reset: function() {
-                this.points = [];
-                this.x = 0; this.y = 0; this.angle = 0;
-                this.chunkRemaining = 0;
-                this.bridgeRemaining = 0;
-                this.tunnelRemaining = 0;
-                this.featureCooldown = 20;
-                this.generatedTo = 0;
-                this.generateTo(2000);
-            }
-        };
-        PATH.init();
-
-        // ============== ROAD SEGMENTS ==============
-        const ROAD = {
-            segLen: 14,
-            count: 32,
-            pool: [],
-            visibleAhead: 280,
-            visibleBehind: 60,
-
-            init: function() {
-                for (let i = 0; i < this.count; i++) {
-                    const group = new THREE.Group();
-
-                    const roadGeo = new THREE.PlaneGeometry(34, this.segLen + 4);
-                    const roadMesh = new THREE.Mesh(roadGeo, roadMat);
-                    roadMesh.rotation.x = -Math.PI / 2;
-                    roadMesh.receiveShadow = true;
-                    group.add(roadMesh);
-                    group.userData.roadMesh = roadMesh;
-
-                    group.userData.roadDist = i * this.segLen - this.visibleBehind;
-                    group.userData.curType = 'city';
-                    group.userData.decorations = [];
-                    group.userData.bridgeParts = null;
-                    group.userData.tunnelParts = null;
-
-                    scene.add(group);
-                    this.pool.push(group);
-                }
-            },
-
-            getRoadPos: function(roadDist) {
-                const info = PATH.getInfo(roadDist);
-                const playerInfo = PATH.getInfo(STATE.playerRoadDist);
-                return {
-                    x: info.x - playerInfo.x,
-                    y: info.y - playerInfo.y,
-                    z: playerInfo.z - info.z,
-                    angle: info.angle,
-                    slope: info.slope,
-                    type: info.type
-                };
-            },
-
-            updateAll: function() {
-                const recycleRange = this.visibleAhead + this.visibleBehind;
-                const minDist = STATE.playerRoadDist - this.visibleBehind;
-                const maxDist = STATE.playerRoadDist + this.visibleAhead;
-
-                for (let i = 0; i < this.pool.length; i++) {
-                    const group = this.pool[i];
-                    let rd = group.userData.roadDist;
-
-                    while (rd < minDist) rd += recycleRange;
-                    while (rd > maxDist) rd -= recycleRange;
-                    group.userData.roadDist = rd;
-
-                    const pos = this.getRoadPos(rd);
-                    group.position.set(pos.x, pos.y, pos.z);
-                    group.rotation.y = -pos.angle;
-                    group.rotation.x = 0;
-
-                    const newType = pos.type;
-                    if (group.userData.curType !== newType) {
-                        this._swapType(group, newType);
-                        group.userData.curType = newType;
-                    }
-                }
-            },
-
-            _swapType: function(group, newType) {
-                const roadMesh = group.userData.roadMesh || group.children[0];
-                if (newType === 'bridge') {
-                    roadMesh.material = bridgeRoadMat;
-                    this._addBridgeDecor(group);
-                    this._removeTunnelDecor(group);
-                } else if (newType === 'tunnel') {
-                    roadMesh.material = tunnelRoadMat;
-                    this._addTunnelDecor(group);
-                    this._removeBridgeDecor(group);
-                } else {
-                    roadMesh.material = roadMat;
-                    this._removeBridgeDecor(group);
-                    this._removeTunnelDecor(group);
-                }
-            },
-
-            _addBridgeDecor: function(group) {
-                if (group.userData.bridgeParts) return;
-                const parts = [];
-                const railMat = bridgeMetalMat;
-                const railLen = this.segLen + 2;
-                for (let side = -1; side <= 1; side += 2) {
-                    const railBot = new THREE.Mesh(
-                        new THREE.BoxGeometry(0.15, 0.3, railLen),
-                        railMat
-                    );
-                    railBot.position.set(side * 14.5, 0.6, 0);
-                    parts.push(railBot);
-                    const railTop = new THREE.Mesh(
-                        new THREE.BoxGeometry(0.15, 0.4, railLen),
-                        railMat
-                    );
-                    railTop.position.set(side * 14.5, 1.5, 0);
-                    parts.push(railTop);
-                    for (let k = 0; k < 4; k++) {
-                        const post = new THREE.Mesh(
-                            new THREE.CylinderGeometry(0.08, 0.08, 1.4, 6),
-                            railMat
-                        );
-                        post.position.set(side * 14.5, 1.0, (k - 1.5) * 4.5);
-                        parts.push(post);
-                    }
-                    const ledStrip = new THREE.Mesh(
-                        new THREE.BoxGeometry(0.08, 0.08, railLen),
-                        new THREE.MeshBasicMaterial({ color: 0x0088ff })
-                    );
-                    ledStrip.position.set(side * 14.5, 1.7, 0);
-                    parts.push(ledStrip);
-                }
-                parts.forEach(p => group.add(p));
-                group.userData.bridgeParts = parts;
-            },
-
-            _removeBridgeDecor: function(group) {
-                if (group.userData.bridgeParts) {
-                    group.userData.bridgeParts.forEach(p => group.remove(p));
-                    group.userData.bridgeParts = null;
-                }
-            },
-
-            _addTunnelDecor: function(group) {
-                if (group.userData.tunnelParts) return;
-                const parts = [];
-                const wallH = 8, wallD = 0.5, segL = this.segLen + 2;
-                for (let side = -1; side <= 1; side += 2) {
-                    const wall = new THREE.Mesh(
-                        new THREE.BoxGeometry(wallD, wallH, segL),
-                        tunnelWallMat
-                    );
-                    wall.position.set(side * 15.5, wallH / 2, 0);
-                    parts.push(wall);
-                    for (let k = 0; k < 3; k++) {
-                        const led = new THREE.Mesh(
-                            new THREE.BoxGeometry(0.1, 0.15, segL * 0.25),
-                            tunnelLEDMat
-                        );
-                        led.position.set(side * 15.25, 1.8 + k * 2.5, (k - 1) * 5);
-                        parts.push(led);
-                    }
-                }
-                const ceiling = new THREE.Mesh(
-                    new THREE.BoxGeometry(31, 0.5, segL),
-                    tunnelWallMat
-                );
-                ceiling.position.set(0, wallH, 0);
-                parts.push(ceiling);
-                const ceilLED = new THREE.Mesh(
-                    new THREE.BoxGeometry(0.15, 0.08, segL),
-                    tunnelLEDMat
-                );
-                ceilLED.position.set(0, wallH - 0.2, 0);
-                parts.push(ceilLED);
-                for (let side = -1; side <= 1; side += 2) {
-                    const emerg = new THREE.Mesh(
-                        new THREE.BoxGeometry(0.3, 0.3, 0.3),
-                        tunnelEmergMat
-                    );
-                    emerg.position.set(side * 15.25, 7, 0);
-                    parts.push(emerg);
-                }
-                parts.forEach(p => group.add(p));
-                group.userData.tunnelParts = parts;
-            },
-
-            _removeTunnelDecor: function(group) {
-                if (group.userData.tunnelParts) {
-                    group.userData.tunnelParts.forEach(p => group.remove(p));
-                    group.userData.tunnelParts = null;
-                }
-            }
-        };
-        ROAD.init();
-
-        // ============== LANE MARKINGS (pooled, follow path) ==============
-        const LANE_MARKINGS = {
-            dashes: [],
-            leftLines: [],
-            rightLines: [],
-            dashSpacing: 3.5,
-            lineSpacing: 8,
-
-            init: function() {
-                const dashGeo = new THREE.PlaneGeometry(0.3, 2.5);
-                const dashMat = new THREE.MeshBasicMaterial({ color: 0x444444 });
-                for (let i = 0; i < 60; i++) {
-                    const d = new THREE.Mesh(dashGeo, dashMat);
-                    d.rotation.x = -Math.PI / 2;
-                    d.position.y = 0.03;
-                    d.userData.roadDist = i * this.dashSpacing - 60;
-                    scene.add(d);
-                    this.dashes.push(d);
-                }
-                const lineGeo = new THREE.PlaneGeometry(0.15, this.lineSpacing + 1);
-                const lineMat = new THREE.MeshBasicMaterial({ color: 0xcccccc });
-                for (let i = 0; i < 40; i++) {
-                    const lL = new THREE.Mesh(lineGeo, lineMat);
-                    lL.rotation.x = -Math.PI / 2;
-                    lL.position.y = 0.03;
-                    lL.userData.roadDist = i * this.lineSpacing - 60;
-                    lL.userData.side = -1;
-                    scene.add(lL);
-                    this.leftLines.push(lL);
-                }
-                for (let i = 0; i < 40; i++) {
-                    const lR = new THREE.Mesh(lineGeo, lineMat);
-                    lR.rotation.x = -Math.PI / 2;
-                    lR.position.y = 0.03;
-                    lR.userData.roadDist = i * this.lineSpacing - 60;
-                    lR.userData.side = 1;
-                    scene.add(lR);
-                    this.rightLines.push(lR);
-                }
-            },
-
-            updateAll: function() {
-                const minDist = STATE.playerRoadDist - 80;
-                const maxDist = STATE.playerRoadDist + 280;
-                const recycleRange = 360;
-                const playerInfo = PATH.getInfo(STATE.playerRoadDist);
-
-                this.dashes.forEach(d => {
-                    let rd = d.userData.roadDist;
-                    while (rd < minDist) rd += recycleRange;
-                    while (rd > maxDist) rd -= recycleRange;
-                    d.userData.roadDist = rd;
-                    const info = PATH.getInfo(rd);
-                    d.position.set(info.x - playerInfo.x, info.y - playerInfo.y + 0.03, playerInfo.z - info.z);
-                    d.rotation.z = -info.angle;
-                });
-
-                [this.leftLines, this.rightLines].forEach(lines => {
-                    lines.forEach(l => {
-                        let rd = l.userData.roadDist;
-                        while (rd < minDist) rd += recycleRange;
-                        while (rd > maxDist) rd -= recycleRange;
-                        l.userData.roadDist = rd;
-                        const info = PATH.getInfo(rd);
-                        const side = l.userData.side;
-                        const perpX = -Math.cos(info.angle);
-                        const perpZ = -Math.sin(info.angle);
-                        l.position.set(
-                            info.x - playerInfo.x + perpX * 13.5 * side,
-                            info.y - playerInfo.y + 0.03,
-                            playerInfo.z - info.z + perpZ * 13.5 * side
-                        );
-                        l.rotation.z = -info.angle;
-                    });
-                });
-            }
-        };
-        LANE_MARKINGS.init();
-
-        // ============== STREET LIGHTS (pooled, follow path) ==============
-        const STREET_LIGHTS = {
-            pool: [],
-            count: 24,
-            spacing: 36,
-
-            init: function() {
-                const poleGeo = new THREE.CylinderGeometry(0.1, 0.1, 10, 8);
-                const armGeo = new THREE.CylinderGeometry(0.1, 0.1, 3, 8);
-                const bulbGeo = new THREE.BoxGeometry(0.5, 0.2, 0.8);
-                const mat = new THREE.MeshStandardMaterial({ color: 0x222222 });
-
-                for (let i = 0; i < this.count; i++) {
-                    const group = new THREE.Group();
-                    const pole = new THREE.Mesh(poleGeo, mat);
-                    pole.position.y = 5;
-                    group.add(pole);
-                    const arm = new THREE.Mesh(armGeo, mat);
-                    arm.position.y = 9;
-                    group.add(arm);
-                    const bulb = new THREE.Mesh(bulbGeo, streetLightMat);
-                    bulb.position.y = 9.3;
-                    group.add(bulb);
-                    const light = new THREE.PointLight(0xffaa00, 2, 40);
-                    light.position.y = 8.5;
-                    group.add(light);
-                    group.userData.roadDist = i * this.spacing - 80;
-                    group.userData.side = i % 2 === 0 ? 1 : -1;
-                    group.userData.lightObj = light;
-                    scene.add(group);
-                    this.pool.push(group);
-                }
-            },
-
-            updateAll: function() {
-                const minDist = STATE.playerRoadDist - 80;
-                const maxDist = STATE.playerRoadDist + 280;
-                const recycleRange = 360;
-                for (let i = 0; i < this.pool.length; i++) {
-                    const g = this.pool[i];
-                    let rd = g.userData.roadDist;
-                    while (rd < minDist) rd += recycleRange;
-                    while (rd > maxDist) rd -= recycleRange;
-                    g.userData.roadDist = rd;
-                    const info = PATH.getInfo(rd);
-                    const playerInfo = PATH.getInfo(STATE.playerRoadDist);
-                    const side = g.userData.side;
-                    const perpX = -Math.cos(info.angle);
-                    const perpZ = -Math.sin(info.angle);
-                    g.position.set(
-                        info.x - playerInfo.x + perpX * 8 * side,
-                        info.y - playerInfo.y,
-                        playerInfo.z - info.z + perpZ * 8 * side
-                    );
-                    g.rotation.y = -info.angle;
-                    g.position.y += (side > 0 ? 0 : 0);
-                }
-            }
-        };
-        STREET_LIGHTS.init();
-
-        // ============== BUILDINGS (pooled) ==============
-        const BUILDINGS = {
-            pool: [],
-            count: 35,
-            spacing: 30,
-
-            init: function() {
-                for (let i = 0; i < this.count; i++) {
-                    const group = new THREE.Group();
-                    const h = 20 + Math.random() * 50;
-                    const w = 6 + Math.random() * 6;
-                    const d = 6 + Math.random() * 6;
-                    const mat = new THREE.MeshStandardMaterial({ color: 0x050505, roughness: 0.8 });
-                    const b = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), mat);
-                    b.scale.set(w, h, d);
-                    b.position.y = h / 2;
-                    group.add(b);
-                    const winCount = 25 + Math.floor(Math.random() * 20);
-                    for (let j = 0; j < winCount; j++) {
-                        const win = new THREE.Mesh(
-                            new THREE.PlaneGeometry(0.4, 0.8),
-                            new THREE.MeshBasicMaterial({ color: 0xffffaa })
-                        );
-                        win.position.set((Math.random() - 0.5) * w, Math.random() * h, d / 2 + 0.05);
-                        if (Math.random() > 0.3) group.add(win);
-                    }
-                    group.userData.roadDist = i * this.spacing - 200;
-                    group.userData.side = (i % 2 === 0 ? -1 : 1);
-                    group.userData.distFromRoad = 24 + Math.random() * 18;
-                    scene.add(group);
-                    this.pool.push(group);
-                }
-            },
-
-            updateAll: function() {
-                const minDist = STATE.playerRoadDist - 250;
-                const maxDist = STATE.playerRoadDist + 350;
-                const recycleRange = 600;
-                for (let i = 0; i < this.pool.length; i++) {
-                    const g = this.pool[i];
-                    let rd = g.userData.roadDist;
-                    while (rd < minDist) rd += recycleRange;
-                    while (rd > maxDist) rd -= recycleRange;
-                    g.userData.roadDist = rd;
-                    const info = PATH.getInfo(rd);
-                    const playerInfo = PATH.getInfo(STATE.playerRoadDist);
-                    const side = g.userData.side;
-                    const perpX = -Math.cos(info.angle);
-                    const perpZ = -Math.sin(info.angle);
-                    const distFromRoad = g.userData.distFromRoad;
-                    g.position.set(
-                        info.x - playerInfo.x + perpX * distFromRoad * side,
-                        info.y - playerInfo.y,
-                        playerInfo.z - info.z + perpZ * distFromRoad * side
-                    );
-                    g.rotation.y = -info.angle;
-                    if (CONFIG.cheats.chaos) {
-                        g.rotation.y += 0.02;
-                        g.rotation.z = Math.sin(STATE.frame * 0.1 + g.userData.roadDist) * 0.1;
-                    }
-                }
-            }
-        };
-        BUILDINGS.init();
-
-        // ============== BRIDGE SUPPORTS ==============
-        const BRIDGE_SUPPORTS = {
-            pool: [],
-            count: 12,
-
-            init: function() {
-                for (let i = 0; i < this.count; i++) {
-                    const group = new THREE.Group();
-                    const pillarH = 8 + Math.random() * 6;
-                    const pillarGeo = new THREE.CylinderGeometry(0.3, 0.5, pillarH, 8);
-                    for (let s = -1; s <= 1; s += 2) {
-                        const pillar = new THREE.Mesh(pillarGeo, bridgeMetalMat);
-                        pillar.position.set(s * 5, -pillarH / 2, 0);
-                        group.add(pillar);
-                    }
-                    const crossBeam = new THREE.Mesh(
-                        new THREE.BoxGeometry(12, 0.4, 1.5),
-                        bridgeMetalMat
-                    );
-                    crossBeam.position.y = -pillarH;
-                    group.add(crossBeam);
-                    const spotLight = new THREE.PointLight(0x004488, 3, 25);
-                    spotLight.position.set(0, -pillarH + 0.5, 0);
-                    group.add(spotLight);
-                    group.userData.roadDist = -100;
-                    group.userData.active = false;
-                    group.visible = false;
-                    scene.add(group);
-                    this.pool.push(group);
-                }
-            },
-
-            updateAll: function() {
-                let used = 0;
-                const minDist = STATE.playerRoadDist - 40;
-                const maxDist = STATE.playerRoadDist + 200;
-                for (let d = Math.floor(minDist / 30) * 30; d <= maxDist; d += 30) {
-                    const info = PATH.getInfo(d);
-                    if (info.type === 'bridge' && info.y > 1) {
-                        this._placeSupport(used, d, info);
-                        used++;
-                        if (used >= this.count) break;
-                    }
-                }
-                for (let i = used; i < this.count; i++) {
-                    const g = this.pool[i];
-                    if (g.userData.active) {
-                        g.userData.active = false;
-                        g.visible = false;
-                    }
-                }
-            },
-
-            _placeSupport: function(idx, dist, info) {
-                if (idx >= this.count) return;
-                const g = this.pool[idx];
-                const playerInfo = PATH.getInfo(STATE.playerRoadDist);
-                g.position.set(
-                    info.x - playerInfo.x,
-                    info.y - playerInfo.y - 8,
-                    playerInfo.z - info.z
-                );
-                g.rotation.y = -info.angle;
-                g.userData.active = true;
-                g.visible = true;
-            }
-        };
-        BRIDGE_SUPPORTS.init();
-
-        // ============== BATMOBILE ==============
-        const carGroup = new THREE.Group();
-        const mainChassis = new THREE.Mesh(new THREE.BoxGeometry(2.0, 0.6, 3.8), carPaintMat);
-        mainChassis.position.y = 0.6;
-        carGroup.add(mainChassis);
-        const armor1 = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.4, 1.8), carPaintMat);
-        armor1.position.set(0, 0.8, 0.5);
-        carGroup.add(armor1);
-        const finGeo = new THREE.BoxGeometry(0.5, 0.2, 1.5);
-        const leftFin = new THREE.Mesh(finGeo, carPaintMat);
-        leftFin.position.set(1.4, 0.6, 1.2); leftFin.rotation.z = -0.2; leftFin.rotation.y = 0.2;
-        carGroup.add(leftFin);
-        const rightFin = leftFin.clone();
-        rightFin.position.set(-1.4, 0.6, 1.2); rightFin.rotation.z = 0.2; rightFin.rotation.y = -0.2;
-        carGroup.add(rightFin);
-        const canopy = new THREE.Mesh(new THREE.ConeGeometry(0.8, 2.2, 4), new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.2, metalness: 0.8 }));
-        canopy.rotation.x = -Math.PI / 2 - 0.1; canopy.position.set(0, 1.1, -0.2); canopy.scale.z = 0.8;
-        carGroup.add(canopy);
-        const burner = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.5, 0.8, 12), new THREE.MeshStandardMaterial({ color: 0x222222, metalness: 0.8 }));
-        burner.rotation.x = Math.PI / 2; burner.position.set(0, 0.6, 2.2);
-        carGroup.add(burner);
-        const flameGeo = new THREE.ConeGeometry(0.3, 2.5, 8);
-        const flameMat = new THREE.MeshBasicMaterial({ color: 0x00aaff, transparent: true, opacity: 0.9 });
-        const flame = new THREE.Mesh(flameGeo, flameMat);
-        flame.rotation.x = Math.PI / 2; flame.position.set(0, 0.6, 3.5); flame.visible = false;
-        carGroup.add(flame);
-
-        const carLight = new THREE.SpotLight(0xffffcc, 15, 120, 0.6, 0.5, 1);
-        carLight.position.set(0, 2, 0);
-        carLight.target.position.set(0, 0, -20);
-        scene.add(carLight);
-        scene.add(carLight.target);
-
-        const headLightMeshGeo = new THREE.BoxGeometry(0.6, 0.2, 0.1);
-        const headLightLeft = new THREE.Mesh(headLightMeshGeo, headlightMat);
-        headLightLeft.position.set(0.8, 0.7, -1.9);
-        carGroup.add(headLightLeft);
-        const headLightRight = headLightLeft.clone();
-        headLightRight.position.set(-0.8, 0.7, -1.9);
-        carGroup.add(headLightRight);
-
-        const frontWheelGeo = new THREE.CylinderGeometry(0.45, 0.45, 0.5, 24);
-        const rearWheelGeo = new THREE.CylinderGeometry(0.65, 0.65, 0.8, 24);
-        const fw1 = new THREE.Mesh(frontWheelGeo, tireMat); fw1.rotation.z = Math.PI / 2; fw1.position.set(1.4, 0.45, 1.2);
-        const fw2 = new THREE.Mesh(frontWheelGeo, tireMat); fw2.rotation.z = Math.PI / 2; fw2.position.set(-1.4, 0.45, 1.2);
-        const rw1 = new THREE.Mesh(rearWheelGeo, tireMat); rw1.rotation.z = Math.PI / 2; rw1.position.set(1.0, 0.65, -1.2);
-        const rw2 = new THREE.Mesh(rearWheelGeo, tireMat); rw2.rotation.z = Math.PI / 2; rw2.position.set(-1.0, 0.65, -1.2);
-        carGroup.add(fw1, fw2, rw1, rw2);
-        carGroup.userData.wheels = [fw1, fw2, rw1, rw2];
-        scene.add(carGroup);
-
-        // ============== ENEMIES ==============
-        const enemies = [];
-        const ENEMY_POOL = [];
-        const MAX_ENEMIES = 12;
-
-        function createEnemyMesh() {
-            const group = new THREE.Group();
-            const color = Math.random() > 0.5 ? 0x660000 : 0x111122;
-            const enemyMat = new THREE.MeshStandardMaterial({ color: color, roughness: 0.2, metalness: 0.6 });
-            const lowerBody = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.5, 4.2), enemyMat);
-            lowerBody.position.y = 0.5; group.add(lowerBody);
-            const cabin = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.5, 2.2), new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.1 }));
-            cabin.position.set(0, 1.0, -0.2); group.add(cabin);
-            const hood = new THREE.Mesh(new THREE.BoxGeometry(1.7, 0.1, 1.2), enemyMat); hood.position.set(0, 0.8, 1.5); group.add(hood);
-            const trunk = new THREE.Mesh(new THREE.BoxGeometry(1.7, 0.1, 0.8), enemyMat); trunk.position.set(0, 0.8, -1.8); group.add(trunk);
-            const tailLightGeo = new THREE.BoxGeometry(0.4, 0.2, 0.1);
-            const tl1 = new THREE.Mesh(tailLightGeo, neonRed); tl1.position.set(0.6, 0.7, -2.15);
-            const tl2 = new THREE.Mesh(tailLightGeo, neonRed); tl2.position.set(-0.6, 0.7, -2.15);
-            group.add(tl1, tl2);
-            const wheelG = new THREE.CylinderGeometry(0.35, 0.35, 0.3, 16);
-            const wPositions = [[0.9, 0.35, 1.2], [-0.9, 0.35, 1.2], [0.9, 0.35, -1.2], [-0.9, 0.35, -1.2]];
-            group.userData.wheels = [];
-            wPositions.forEach(pos => {
-                const w = new THREE.Mesh(wheelG, tireMat); w.rotation.z = Math.PI / 2; w.position.set(...pos); group.add(w); group.userData.wheels.push(w);
-            });
-            return group;
-        }
-
-        function spawnEnemy() {
-            if (STATE.gameOver) return;
-            let group = ENEMY_POOL.find(e => !e.userData.alive && !e.parent);
-            if (!group) {
-                group = createEnemyMesh();
-                ENEMY_POOL.push(group);
-            }
-            const roadDist = STATE.playerRoadDist + 120 + Math.random() * 150;
-            const info = PATH.getInfo(roadDist);
-            const playerInfo = PATH.getInfo(STATE.playerRoadDist);
-            const lane = (Math.floor(Math.random() * 3) - 1) * CONFIG.laneWidth;
-            const perpX = -Math.cos(info.angle);
-            const perpZ = -Math.sin(info.angle);
-            group.position.set(
-                info.x - playerInfo.x + perpX * lane,
-                info.y - playerInfo.y,
-                playerInfo.z - info.z + perpZ * lane
-            );
-            group.rotation.y = -info.angle;
-            group.userData.roadDist = roadDist;
-            group.userData.laneOffset = lane;
-            group.userData.alive = true;
-            group.userData.targetLane = lane;
-            group.visible = true;
-            scene.add(group);
-            enemies.push(group);
-        }
-
-        function recycleEnemy(group) {
-            group.userData.alive = false;
-            group.visible = false;
-            scene.remove(group);
-        }
-
-        // ============== PROJECTILES & PARTICLES ==============
-        const projectiles = [];
-        const batrangGeo = new THREE.CylinderGeometry(0.5, 0.5, 0.1, 3);
-        const particles = [];
-        const particleGeo = new THREE.BoxGeometry(0.15, 0.15, 0.15);
-
-        function createExplosion(pos, color) {
-            for (let i = 0; i < 25; i++) {
-                const mesh = new THREE.Mesh(particleGeo, new THREE.MeshBasicMaterial({ color: color, transparent: true, opacity: 1 }));
-                mesh.position.copy(pos);
-                mesh.userData.vel = new THREE.Vector3((Math.random() - 0.5) * 1.5, (Math.random() * 1.0) + 0.5, (Math.random() - 0.5) * 1.5);
-                mesh.userData.life = 1.0;
-                scene.add(mesh);
-                particles.push(mesh);
-            }
-        }
-
-        // ============== GAME LOGIC ==============
-        let playerX = 0;
-        let playerVelX = 0;
-        const keys = { w: false, a: false, s: false, d: false, space: false };
-
-        // ============== MOBILE TOUCH LOGIC ==============
-        const mobLeft = document.getElementById('mob-left');
-        const mobRight = document.getElementById('mob-right');
-        const mobBoost = document.getElementById('mob-boost');
-        const mobFire = document.getElementById('mob-fire');
-        const mobileCheatInput = document.getElementById('mobile-cheat-input');
-        const mobileCheatPanel = document.getElementById('mobile-cheat-panel');
-        const mobControls = document.getElementById('mobile-controls');
-        const mobCheatTrigger = document.getElementById('mobile-cheat-trigger');
-
-        setTimeout(() => {
-            mobControls.style.pointerEvents = 'all';
-            Array.from(mobControls.children).forEach(btn => btn.style.pointerEvents = 'auto');
-            mobCheatTrigger.style.pointerEvents = 'all';
-        }, 4000);
-
-        function bindTouch(elem, keyStart, keyEnd) {
-            elem.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                if (keyStart === 'a') keys.a = true;
-                if (keyStart === 'd') keys.d = true;
-                if (keyStart === ' ') keys.space = true;
-                if (keyStart === 'f') fireWeapon();
-            });
-            elem.addEventListener('touchend', (e) => {
-                e.preventDefault();
-                if (keyEnd === 'a') keys.a = false;
-                if (keyEnd === 'd') keys.d = false;
-                if (keyEnd === ' ') keys.space = false;
-            });
-        }
-
-        bindTouch(mobLeft, 'a', 'a');
-        bindTouch(mobRight, 'd', 'd');
-        bindTouch(mobBoost, ' ', ' ');
-        bindTouch(mobFire, 'f', 'f');
-
-        document.getElementById('mobile-cheat-trigger').addEventListener('click', () => {
-            mobileCheatPanel.style.display = 'flex';
-            mobileCheatInput.value = "";
-            mobileCheatInput.focus();
-        });
-
-        document.getElementById('close-mobile-cheat').addEventListener('click', () => {
-            mobileCheatPanel.style.display = 'none';
-            mobileCheatInput.blur();
-        });
-
-        mobileCheatInput.addEventListener('input', (e) => {
-            const val = e.target.value.toUpperCase();
-            if (val.includes("WAYNE")) { triggerCheat('god', 'GOD MODE'); e.target.value = ""; }
-            if (val.includes("GOTHAM")) { triggerCheat('infinite', 'INFINITE NITRO'); e.target.value = ""; }
-            if (val.includes("JOKER")) { triggerCheat('chaos', 'CHAOS MODE'); e.target.value = ""; }
-        });
-
-        // ============== UI UPDATERS ==============
-        function updateLifeUI() {
-            const pips = document.querySelectorAll('.life-pip');
-            pips.forEach((pip, index) => {
-                if (index < STATE.lives) pip.classList.remove('lost');
-                else pip.classList.add('lost');
-            });
-        }
-
-        // ============== CHEAT MANAGER ==============
-        function triggerCheat(type, name) {
-            CONFIG.cheats[type] = true;
-            if (type === 'chaos') {
-                scene.fog.color.setHex(0x220033);
-                ambientLight.color.setHex(0x00ff00);
-            }
-            if (type === 'god' || (type === 'chaos' && CONFIG.cheats.god)) {
-                document.getElementById('status-val').innerText = type === 'god' ? "GOD MODE" : "JOKER VENOM";
-                document.getElementById('status-val').style.color = type === 'god' ? "#ffff00" : "#ff00ff";
-            }
-            if (activeCheatTimers[type]) clearTimeout(activeCheatTimers[type]);
-            const el = document.getElementById('cheat-indicator');
-            el.innerText = name + " ACTIVATED [25s]";
-            el.style.opacity = 1;
-            let secondsLeft = 25;
-            const countdownInterval = setInterval(() => {
-                secondsLeft--;
-                el.innerText = name + " [" + secondsLeft + "s]";
-                if (secondsLeft <= 0) clearInterval(countdownInterval);
-            }, 1000);
-            activeCheatTimers[type] = setTimeout(() => {
-                CONFIG.cheats[type] = false;
-                clearInterval(countdownInterval);
-                if (type === 'chaos') {
-                    scene.fog.color.setHex(0x020205);
-                    ambientLight.color.setHex(0x404040);
-                    if (!CONFIG.cheats.god) {
-                        document.getElementById('status-val').innerText = "ONLINE";
-                        document.getElementById('status-val').style.color = "#00ff41";
-                    } else {
-                        document.getElementById('status-val').innerText = "GOD MODE";
-                        document.getElementById('status-val').style.color = "#ffff00";
-                    }
-                }
-                if (type === 'god' && !CONFIG.cheats.chaos) {
-                    document.getElementById('status-val').innerText = "ONLINE";
-                    document.getElementById('status-val').style.color = "#00ff41";
-                }
-                el.innerText = name + " DEACTIVATED";
-                setTimeout(() => { el.style.opacity = 0; }, 2000);
-            }, 25000);
-        }
-
-        // ============== DESKTOP KEYBOARD EVENTS ==============
-        document.addEventListener('keydown', (e) => {
-            if (STATE.gameOver) return;
-            const k = e.key.toLowerCase();
-            if (k === 'a' || k === 'arrowleft') keys.a = true;
-            if (k === 'd' || k === 'arrowright') keys.d = true;
-            if (k === ' ') keys.space = true;
-            if (k === 'f') fireWeapon();
-            STATE.cheatBuffer += k;
-            if (STATE.cheatBuffer.length > 15) STATE.cheatBuffer = STATE.cheatBuffer.slice(-15);
-            if (STATE.cheatBuffer.toLowerCase().includes("wayne")) { triggerCheat('god', 'GOD MODE'); STATE.cheatBuffer = ""; }
-            if (STATE.cheatBuffer.toLowerCase().includes("gotham")) { triggerCheat('infinite', 'INFINITE NITRO'); STATE.cheatBuffer = ""; }
-            if (STATE.cheatBuffer.toLowerCase().includes("joker")) { triggerCheat('chaos', 'CHAOS MODE'); STATE.cheatBuffer = ""; }
-        });
-
-        document.addEventListener('keyup', (e) => {
-            const k = e.key.toLowerCase();
-            if (k === 'a' || k === 'arrowleft') keys.a = false;
-            if (k === 'd' || k === 'arrowright') keys.d = false;
-            if (k === ' ') keys.space = false;
-        });
-
-        function fireWeapon() {
-            if (STATE.batarangs > 0) {
-                STATE.batarangs--;
-                updateAmmo();
-                const p = new THREE.Mesh(batrangGeo, neonBlue);
-                p.rotation.x = Math.PI / 2;
-                p.position.copy(carGroup.position);
-                p.position.y = 1;
-                scene.add(p);
-                projectiles.push(p);
-                if (STATE.batarangs === 2) setTimeout(reloadAmmo, 2000);
-            }
-        }
-
-        function reloadAmmo() {
-            if (STATE.batarangs < 3) {
-                STATE.batarangs++;
-                updateAmmo();
-                if (STATE.batarangs < 3) setTimeout(reloadAmmo, 2000);
-            }
-        }
-
-        function updateAmmo() {
-            const container = document.getElementById('ammo-container');
-            container.innerHTML = '';
-            for (let i = 0; i < 3; i++) {
-                const pip = document.createElement('span');
-                pip.className = i < STATE.batarangs ? 'ammo-pip' : 'ammo-pip empty';
-                container.appendChild(pip);
-            }
-        }
-
-        // ============== GAME OVER & RESTART ==============
-        function gameOver() {
-            STATE.playing = false;
-            STATE.gameOver = true;
-            document.getElementById('game-over-screen').style.display = 'flex';
-        }
-
-        function restartGame() {
-            STATE.playing = true;
-            STATE.gameOver = false;
-            STATE.lives = 6;
-            STATE.score = 0;
-            STATE.randomCheatTriggered = false;
-            STATE.startTime = clock.getElapsedTime();
-            STATE.playerRoadDist = 0;
-            updateLifeUI();
-            CONFIG.speed.current = CONFIG.speed.base;
-            CONFIG.nitro.amount = 100;
-            playerX = 0;
-            playerVelX = 0;
-            carGroup.position.set(0, 0, 0);
-            enemies.forEach(e => recycleEnemy(e));
-            enemies.length = 0;
-            projectiles.forEach(p => scene.remove(p));
-            projectiles.length = 0;
-            particles.forEach(p => { scene.remove(p); });
-            particles.length = 0;
-            PATH.reset();
-            document.getElementById('game-over-screen').style.display = 'none';
-        }
-
-        document.getElementById('restart-btn').addEventListener('click', restartGame);
-        setInterval(spawnEnemy, 1500);
-
-        // ============== MAIN LOOP ==============
-        const clock = new THREE.Clock();
-        STATE.startTime = clock.getElapsedTime();
-        let lastZoneType = 'city';
-
-        function animate() {
-            requestAnimationFrame(animate);
-            const delta = Math.min(clock.getDelta(), 0.1);
-            const time = clock.getElapsedTime();
-            const playTime = time - STATE.startTime;
-
-            document.getElementById('time-val').innerText = playTime.toFixed(1);
-
-            // Random cheat at 45s
-            if (!STATE.randomCheatTriggered && playTime > 45) {
-                STATE.randomCheatTriggered = true;
-                const cheats = [
-                    { key: 'god', name: 'AUTO: GOD MODE' },
-                    { key: 'infinite', name: 'AUTO: INFINITE NITRO' },
-                    { key: 'chaos', name: 'AUTO: CHAOS MODE' }
-                ];
-                const pick = cheats[Math.floor(Math.random() * cheats.length)];
-                triggerCheat(pick.key, pick.name);
-            }
-
-            // Speed & nitro
-            let activeSpeed = STATE.playing ? CONFIG.speed.current : 0;
-            const moveSpeed = activeSpeed * 80 * delta;
-            STATE.playerRoadDist += moveSpeed;
-
-            let isBoosting = false;
-            const nitroAvailable = CONFIG.nitro.amount > 0 || CONFIG.cheats.infinite;
-            if (keys.space && nitroAvailable && STATE.playing) {
-                isBoosting = true;
-                CONFIG.speed.current = THREE.MathUtils.lerp(CONFIG.speed.current, CONFIG.speed.nitro, 0.08);
-                if (!CONFIG.cheats.infinite) CONFIG.nitro.amount -= CONFIG.nitro.drain;
-                else CONFIG.nitro.amount = 100;
-                CONFIG.camera.shake = 0.3;
-                camera.fov = THREE.MathUtils.lerp(camera.fov, CONFIG.camera.fovNitro, 0.05);
-            } else {
-                CONFIG.speed.current = THREE.MathUtils.lerp(CONFIG.speed.current, CONFIG.speed.base, 0.04);
-                if (!CONFIG.cheats.infinite) CONFIG.nitro.amount = Math.min(100, CONFIG.nitro.amount + CONFIG.nitro.regen);
-                camera.fov = THREE.MathUtils.lerp(camera.fov, CONFIG.camera.fovBase, 0.05);
-            }
-            camera.updateProjectionMatrix();
-
-            document.getElementById('nitro-fill').style.transform = 'scaleX(' + (CONFIG.nitro.amount / 100) + ')';
-            document.getElementById('speed-val').innerText = Math.floor(CONFIG.speed.current * 180 + Math.random() * 5);
-            STATE.score += Math.floor(CONFIG.speed.current * 2);
-            document.getElementById('score-val').innerText = STATE.score;
-
-            flame.visible = isBoosting;
-            if (isBoosting) {
-                flame.scale.set(1, 1 + Math.random() * 0.5, 1);
-                carLight.intensity = 15 + Math.random() * 5;
-            } else {
-                carLight.intensity = 15;
-            }
-
-            // Player steering
-            if (STATE.playing && !STATE.gameOver) {
-                if (keys.a) playerVelX -= 60 * delta;
-                if (keys.d) playerVelX += 60 * delta;
-                playerVelX *= 0.92;
-                playerX += playerVelX * delta;
-                const limit = CONFIG.laneWidth * 1.6;
-                if (playerX > limit) { playerX = limit; playerVelX = 0; }
-                if (playerX < -limit) { playerX = -limit; playerVelX = 0; }
-            }
-
-            // Car position follows playerX relative to road center
-            const playerInfo = PATH.getInfo(STATE.playerRoadDist);
-            carGroup.position.set(playerX, 0, 0);
-            carGroup.rotation.z = -playerVelX * 0.03;
-            carGroup.rotation.y = -playerInfo.angle + (-playerVelX * 0.015);
-            carGroup.userData.wheels.forEach(w => w.rotation.x += activeSpeed * 0.5);
-
-            const lookAhead = 20;
-            carLight.target.position.set(
-                Math.sin(playerInfo.angle) * lookAhead,
-                playerInfo.slope * 3,
-                -Math.cos(playerInfo.angle) * lookAhead
-            );
-
-            // Update road, lights, buildings
-            ROAD.updateAll();
-            LANE_MARKINGS.updateAll();
-            STREET_LIGHTS.updateAll();
-            BUILDINGS.updateAll();
-            BRIDGE_SUPPORTS.updateAll();
-
-            if (STATE.frame % 60 === 0) PATH.trim(STATE.playerRoadDist);
-
-            // Zone detection for dynamic lighting
-            const curZone = playerInfo.type;
-            if (curZone !== lastZoneType) {
-                lastZoneType = curZone;
-                if (curZone === 'bridge') {
-                    zoneAmbient.target = 0x224466;
-                    zoneAmbient.targetIntensity = 0.55;
-                    zoneLight.color.setHex(0x4488cc);
-                    zoneLight.intensity = 8;
-                } else if (curZone === 'tunnel') {
-                    zoneAmbient.target = 0x110022;
-                    zoneAmbient.targetIntensity = 0.25;
-                    zoneLight.color.setHex(0x00aaff);
-                    zoneLight.intensity = 15;
-                } else {
-                    zoneAmbient.target = 0x404040;
-                    zoneAmbient.targetIntensity = 0.4;
-                    zoneLight.color.setHex(0xffaa00);
-                    zoneLight.intensity = 0;
-                }
-            }
-            ambientLight.color.setHex(
-                new THREE.Color(zoneAmbient.current).lerp(new THREE.Color(zoneAmbient.target), 0.03).getHex()
-            );
-            zoneAmbient.intensity += (zoneAmbient.targetIntensity - zoneAmbient.intensity) * 0.03;
-            zoneLight.position.set(5, 12, -10);
-            zoneLight.intensity += ((curZone === 'bridge' ? 8 : (curZone === 'tunnel' ? 15 : 0)) - zoneLight.intensity) * 0.05;
-
-            // Enemies update
-            const enemyMinDist = STATE.playerRoadDist - 30;
-            const enemyMaxDist = STATE.playerRoadDist + 300;
-            for (let i = enemies.length - 1; i >= 0; i--) {
-                const e = enemies[i];
-                let erd = e.userData.roadDist;
-                if (STATE.playing) erd += (CONFIG.speed.current * 80 - 25) * delta;
-                e.userData.roadDist = erd;
-
-                if (erd < enemyMinDist || erd > enemyMaxDist) {
-                    recycleEnemy(e);
-                    enemies.splice(i, 1);
-                    continue;
-                }
-
-                const eInfo = PATH.getInfo(erd);
-                const pInfo = PATH.getInfo(STATE.playerRoadDist);
-                const perpX = -Math.cos(eInfo.angle);
-                const perpZ = -Math.sin(eInfo.angle);
-                e.position.set(
-                    eInfo.x - pInfo.x + perpX * e.userData.laneOffset,
-                    eInfo.y - pInfo.y,
-                    pInfo.z - eInfo.z + perpZ * e.userData.laneOffset
-                );
-                e.rotation.y = -eInfo.angle;
-                e.userData.wheels.forEach(w => w.rotation.x += 0.3);
-
-                if (Math.random() < 0.01) e.userData.targetLane = (Math.random() - 0.5) * 8;
-                if (e.userData.targetLane !== undefined)
-                    e.userData.laneOffset += (e.userData.targetLane - e.userData.laneOffset) * 0.02;
-
-                if (CONFIG.cheats.chaos) {
-                    e.rotation.y += 0.1;
-                    e.userData.laneOffset += Math.sin(time * 10) * 0.1;
-                }
-
-                const dx = e.position.x - carGroup.position.x;
-                const dy = e.position.y - carGroup.position.y;
-                const dz = e.position.z - carGroup.position.z;
-                if (Math.abs(dz) < 3.5 && Math.abs(dx) < 2.0 && Math.abs(dy) < 2.0) {
-                    if (!CONFIG.cheats.god && STATE.playing) {
-                        createExplosion(e.position, 0xff0000);
-                        STATE.lives--;
-                        updateLifeUI();
-                        CONFIG.speed.current *= 0.5;
-                        CONFIG.camera.shake = 1.2;
-                        document.querySelector('.warning-text').style.display = 'block';
-                        setTimeout(() => document.querySelector('.warning-text').style.display = 'none', 500);
-                        e.userData.roadDist += 15;
-                        e.userData.laneOffset += (e.userData.laneOffset > playerX ? 4 : -4);
-                        if (STATE.lives <= 0) gameOver();
-                    } else if (CONFIG.cheats.god) {
-                        createExplosion(e.position, 0xffaa00);
-                        recycleEnemy(e);
-                        enemies.splice(i, 1);
-                        STATE.score += 100;
-                    }
-                }
-            }
-
-            // Projectiles
-            for (let i = projectiles.length - 1; i >= 0; i--) {
-                const p = projectiles[i];
-                p.position.z -= 120 * delta;
-                p.rotation.y += 15 * delta;
-                let hit = false;
-                for (let j = enemies.length - 1; j >= 0; j--) {
-                    if (p.position.distanceTo(enemies[j].position) < 3) {
-                        createExplosion(enemies[j].position, CONFIG.cheats.chaos ? 0xff00ff : 0xff5500);
-                        recycleEnemy(enemies[j]);
-                        enemies.splice(j, 1);
-                        hit = true;
-                        STATE.score += 500;
-                        break;
-                    }
-                }
-                if (hit || p.position.z < -300) {
-                    scene.remove(p);
-                    projectiles.splice(i, 1);
-                }
-            }
-
-            // Particles
-            for (let i = particles.length - 1; i >= 0; i--) {
-                const p = particles[i];
-                p.position.add(p.userData.vel);
-                p.userData.vel.y -= 0.02;
-                p.rotation.x += 0.1;
-                p.userData.life -= 0.03;
-                p.material.opacity = p.userData.life;
-                p.scale.multiplyScalar(0.94);
-                if (p.userData.life <= 0 || p.scale.x < 0.01) {
-                    scene.remove(p);
-                    particles.splice(i, 1);
-                }
-            }
-
-            // Camera
-            const shakeX = (Math.random() - 0.5) * CONFIG.camera.shake;
-            const shakeY = (Math.random() - 0.5) * CONFIG.camera.shake;
-            CONFIG.camera.shake *= 0.9;
-            const pathAngle = playerInfo.angle;
-            const pathSlope = playerInfo.slope;
-            const behindDist = 9 + CONFIG.speed.current * 2;
-            const cosA = Math.cos(pathAngle);
-            const sinA = Math.sin(pathAngle);
-            const camLocalX = playerX * 0.4 + shakeX;
-            const camLocalY = 4 + shakeY + Math.abs(playerVelX) * 0.02;
-            const camLocalZ = behindDist;
-            camera.position.x = camLocalX * cosA - camLocalZ * sinA;
-            camera.position.z = camLocalX * sinA + camLocalZ * cosA;
-            camera.position.y = camLocalY;
-            if (CONFIG.cheats.chaos) camera.position.x += (Math.random() - 0.5) * 0.2;
-            const lookAheadDist = 20;
-            const lookLocalX = playerX * 0.1;
-            const lookLocalZ = -lookAheadDist;
-            const lookX = lookLocalX * cosA - lookLocalZ * sinA;
-            const lookZ = lookLocalX * sinA + lookLocalZ * cosA;
-            camera.lookAt(lookX, pathSlope * lookAheadDist, lookZ);
-
-            composer.render();
-            STATE.frame++;
-        }
-
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            bloomPass.setSize(window.innerWidth, window.innerHeight);
-            composer.setSize(window.innerWidth, window.innerHeight);
-        });
-
-        animate();
-    </script>
+  <script type="module" src="index.js"></script>
 </body>
 </html>

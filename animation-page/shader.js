@@ -225,8 +225,8 @@ function init() {
           float r = 0.10 + mod(fi, 3.0) * 0.06;
           float sx = 0.31 + fi * 0.07;
           float sy = 0.37 + fi * 0.09;
-          float ax = 1.4 + mod(fi, 2.0) * 0.5;
-          float ay = 1.1 + mod(fi + 1.0, 2.0) * 0.4;
+          float ax = (1.4 + mod(fi, 2.0) * 0.5) * uMovementScale;
+          float ay = (1.1 + mod(fi + 1.0, 2.0) * 0.4) * uMovementScale;
           float px = fi * 1.4;
           float py = fi * 2.1;
 

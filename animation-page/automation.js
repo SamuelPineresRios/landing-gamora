@@ -283,11 +283,11 @@ export function initAutomation() {
       if (!u) return;
       const v = shaderBounce.t;
       let m;
-      if (v < 0.15)                m = 1 - (v / 0.15) * 0.45;       // gravity drop  →  1 → 0.55
-      else if (v < 0.4)           m = 0.55 + ((v - 0.15) / 0.25) * 0.55; // bounce up → 0.55 → 1.1
-      else if (v < 0.7)           m = 1.1 * Math.exp(-(v - 0.4) * 4) + 0.85 * (1 - Math.exp(-(v - 0.4) * 4)); // settle
+      if (v < 0.12)                m = 0.85 * (1 - (v / 0.12) * 0.75);     // gravity drop  → 0.85 → 0.21
+      else if (v < 0.4)           m = 0.85 * (0.25 + ((v - 0.12) / 0.28) * 1.25); // bounce → 0.21 → 1.28
+      else if (v < 0.7)           m = 0.85 + 0.43 * Math.exp(-(v - 0.4) * 6);    // settle
       else                        m = 0.85;
-      u.uMovementScale.value = 0.85 * m;
+      u.uMovementScale.value = m;
     }
   }, "toWeb");
 

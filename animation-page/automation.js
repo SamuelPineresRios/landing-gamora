@@ -262,23 +262,17 @@ export function initAutomation() {
   tl.to({}, { duration: 2 }, "ia+=8.5");
 
   // ═══════════════════════════════════════
-  // TRANSITION → WEB  (42 → 44)
+  // TRANSITION → WEB  (42 → 44.5) — horizontal slide
   // ═══════════════════════════════════════
   tl.addLabel("toWeb", 42);
 
-  tl.to(".svc-ia .svc-benefits", { opacity: 0, scale: 0.7, y: -12, filter: "blur(2px)", duration: 1.2, ease: "power2.in" }, "toWeb+=0.3");
-  tl.to(".svc-ia .svc-block", { opacity: 0, scale: 0.8, y: -10, filter: "blur(2px)", stagger: 0.3, duration: 1.2, ease: "power2.in" }, "toWeb+=0.5");
-  tl.to(".svc-ia .svc-lead", { opacity: 0, scale: 0.85, y: -8, filter: "blur(2px)", duration: 1.2, ease: "power2.in" }, "toWeb+=0.7");
-  tl.to(".svc-ia .svc-title", { opacity: 0, scale: 0.9, y: -6, filter: "blur(2px)", duration: 1.2, ease: "power2.in" }, "toWeb+=0.9");
-  tl.to(".svc-ia .svc-eyebrow", { opacity: 0, y: -6, filter: "blur(2px)", duration: 1, ease: "power2.in" }, "toWeb+=1.1");
-  tl.to(".ia-phone", { opacity: 0, scale: 0.6, y: -14, filter: "blur(3px)", duration: 1.5, ease: "power2.in" }, "toWeb+=0.2");
-  tl.to(".ia-bubble", { opacity: 0, scale: 0.7, y: -10, filter: "blur(3px)", stagger: 0.3, duration: 1.2, ease: "power2.in" }, "toWeb+=0.6");
-
-  tl.to(panels[2], { opacity: 0, y: -30, duration: 2, ease: "power2.inOut" }, "toWeb");
-  tl.set(panels[2], { visibility: "hidden" }, "toWeb+=2");
-  tl.set(panels[3], { visibility: "visible", y: 30 }, "toWeb+=0.5");
-  tl.to(panels[3], { opacity: 1, y: 0, duration: 2, ease: "power2.out" }, "toWeb+=0.8");
-  tl.add(() => { setActivePanel(panels[3]); setActiveDot(3); }, "toWeb+=1");
+  // Web panel starts off-screen left, IA slides out to the right
+  tl.set(panels[3], { visibility: "visible", opacity: 1, x: "-100%" }, "toWeb");
+  tl.to(panels[2], { x: "100%", duration: 2.5, ease: "power2.inOut" }, "toWeb");
+  tl.to(panels[3], { x: 0, duration: 2.5, ease: "power2.out" }, "toWeb");
+  // After slide, hide the IA panel and reset its x position
+  tl.set(panels[2], { visibility: "hidden", x: 0 }, "toWeb+=2.6");
+  tl.add(() => { setActivePanel(panels[3]); setActiveDot(3); }, "toWeb+=0.8");
 
   // ═══════════════════════════════════════
   // PANEL 3 — WEB  (44 → 56)

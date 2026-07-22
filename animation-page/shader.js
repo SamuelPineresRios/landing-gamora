@@ -22,8 +22,8 @@ const devicePixelRatio = Math.min(
 );
 
 const settings = {
-  sphereCount: 8,
-  mobileSphereCount: 3,
+  sphereCount: 4,
+  mobileSphereCount: 2,
   backgroundColor: new THREE.Color(0x0A1628),
   sphereColor: new THREE.Color(0x142c48),
   lightColor: new THREE.Color(0x00E5FF),

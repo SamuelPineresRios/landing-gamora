@@ -62,34 +62,30 @@ export function initAutomation() {
     opacity: 0,
     y: 28
   });
-  gsap.set(".flow-node", { opacity: 0, y: 10 });
-  gsap.set(".flow-pipe", { opacity: 0 });
+  gsap.set(".flow-step", { opacity: 0, y: 10 });
 
   // Panel 1
   gsap.set(".svc-erp .svc-eyebrow, .svc-erp .svc-title, .svc-erp .svc-lead, .svc-erp .svc-block, .svc-erp .svc-benefits", {
     opacity: 0,
     y: 28
   });
-  gsap.set(".erp-card", { opacity: 0, y: 16 });
-  gsap.set(".erp-modules span", { opacity: 0 });
+  gsap.set(".erp-kpi", { opacity: 0, y: 16 });
 
   // Panel 2
   gsap.set(".svc-ia .svc-eyebrow, .svc-ia .svc-title, .svc-ia .svc-lead, .svc-ia .svc-block, .svc-ia .svc-benefits", {
     opacity: 0,
     y: 28
   });
-  gsap.set(".ia-core", { opacity: 0, scale: 0.7 });
-  gsap.set(".ia-node", { opacity: 0 });
-  gsap.set(".ia-msg", { opacity: 0, y: 10 });
+  gsap.set(".ia-phone", { opacity: 0, y: 20 });
+  gsap.set(".ia-bubble", { opacity: 0, y: 10 });
 
   // Panel 3
   gsap.set(".svc-web .svc-eyebrow, .svc-web .svc-title, .svc-web .svc-lead, .svc-web .svc-block, .svc-web .svc-benefits", {
     opacity: 0,
     y: 28
   });
-  gsap.set(".web-result", { opacity: 0, y: 12 });
-  gsap.set(".web-metric", { opacity: 0, y: 10 });
-  gsap.set(".web-browser", { opacity: 0, y: 20 });
+  gsap.set(".web-card", { opacity: 0, y: 20 });
+  gsap.set(".web-stat", { opacity: 0, y: 8 });
 
   // CTA
   gsap.set(".svc-cta-title, .svc-cta .cta-primary, .svc-cta .contact-block", {
@@ -143,40 +139,27 @@ export function initAutomation() {
   tl.to(".svc-auto .svc-benefits", { opacity: 1, y: 0, duration: 2, ease: "power2.out" }, "auto+=5.5");
 
   // Flow cascade — fade in + light up
-  const flowNodes = gsap.utils.toArray(".flow-node");
-  const flowPipes = gsap.utils.toArray(".flow-pipe");
-  flowNodes.forEach((node, i) => {
+  const flowSteps = gsap.utils.toArray(".flow-step");
+  const flowBars = gsap.utils.toArray(".flow-bar");
+  flowSteps.forEach((node, i) => {
     tl.to(node, {
       opacity: 1,
       y: 0,
       duration: 1.2,
       ease: "power2.out",
-      onStart: () => node.classList.add("is-lit"),
-      onReverseComplete: () => node.classList.remove("is-lit")
+      onStart: () => node.classList.add("lit"),
+      onReverseComplete: () => node.classList.remove("lit")
     }, `auto+=${4 + i * 1}`);
-    if (flowPipes[i]) {
-      tl.to(flowPipes[i], {
+    if (flowBars[i]) {
+      tl.to(flowBars[i], {
         opacity: 1,
         duration: 1,
-        onStart: () => flowPipes[i].classList.add("is-lit"),
-        onReverseComplete: () => flowPipes[i].classList.remove("is-lit")
+        ease: "power2.out"
       }, `auto+=${5 + i * 1}`);
     }
   });
 
-  // Example — SplitText word-by-word, like reading a story
-  const autoExampleWords = new SplitText(".svc-auto .svc-example-text", { type: "words" });
-  gsap.set(autoExampleWords.words, { opacity: 0, y: 8 });
-  tl.to(autoExampleWords.words, {
-    opacity: 1,
-    y: 0,
-    stagger: 0.06,
-    duration: 1,
-    ease: "power2.out"
-  }, "auto+=9");
-
-  // Hold reading time
-  tl.to({}, { duration: 2 }, "auto+=11.5");
+  tl.to({}, { duration: 2 }, "auto+=8");
 
   // ═══════════════════════════════════════
   // TRANSITION → ERP  (14 → 16)
@@ -190,39 +173,25 @@ export function initAutomation() {
   tl.to(".svc-auto .svc-title", { opacity: 0, scale: 0.9, y: -6, filter: "blur(2px)", duration: 1.2, ease: "power2.in" }, "toErp+=0.9");
   tl.to(".svc-auto .svc-eyebrow", { opacity: 0, y: -6, filter: "blur(2px)", duration: 1, ease: "power2.in" }, "toErp+=1.1");
 
-  flowNodes.forEach((node, i) => {
+  flowSteps.forEach((node, i) => {
     tl.to(node, {
       opacity: 0,
-      scale: 0.6,
-      y: -14,
-      filter: "blur(3px)",
-      duration: 1.5,
+      scale: 0.8,
+      y: -10,
+      filter: "blur(2px)",
+      duration: 1.2,
       ease: "power2.in",
-      onStart: () => node.classList.remove("is-lit"),
-      onReverseComplete: () => node.classList.add("is-lit")
-    }, `toErp+=${0.1 + (flowNodes.length - 1 - i) * 0.3}`);
+      onStart: () => node.classList.remove("lit"),
+      onReverseComplete: () => node.classList.add("lit")
+    }, `toErp+=${0.1 + (flowSteps.length - 1 - i) * 0.25}`);
   });
-  flowPipes.forEach((pipe, i) => {
-    tl.to(pipe, {
+  flowBars.forEach((bar, i) => {
+    tl.to(bar, {
       opacity: 0,
-      duration: 1,
-      ease: "power1.in",
-      onStart: () => pipe.classList.remove("is-lit")
-    }, `toErp+=${0.3 + (flowPipes.length - 1 - i) * 0.3}`);
+      duration: 0.8,
+      ease: "power1.in"
+    }, `toErp+=${0.3 + (flowBars.length - 1 - i) * 0.25}`);
   });
-  tl.to(".svc-auto .svc-example-text", {
-    opacity: 0,
-    filter: "blur(2px)",
-    duration: 1,
-    ease: "power2.in"
-  }, "toErp+=1");
-  tl.to(autoExampleWords.words, {
-    opacity: 0,
-    y: -6,
-    stagger: { each: 0.04, from: "end" },
-    duration: 0.8,
-    ease: "power2.in"
-  }, "toErp+=0.9");
 
   tl.to(panels[0], { opacity: 0, y: -30, duration: 2, ease: "power2.inOut" }, "toErp");
   tl.set(panels[0], { visibility: "hidden" }, "toErp+=2");
@@ -241,7 +210,7 @@ export function initAutomation() {
   tl.to(".svc-erp .svc-block", { opacity: 1, y: 0, stagger: 0.8, duration: 2, ease: "power2.out" }, "erp+=3.5");
   tl.to(".svc-erp .svc-benefits", { opacity: 1, y: 0, duration: 2, ease: "power2.out" }, "erp+=5.5");
 
-  tl.to(".erp-card", {
+  tl.to(".erp-kpi", {
     opacity: 1,
     y: 0,
     stagger: 0.5,
@@ -249,24 +218,7 @@ export function initAutomation() {
     ease: "power2.out"
   }, "erp+=4");
 
-  tl.to(".erp-modules span", {
-    opacity: 1,
-    stagger: 0.15,
-    duration: 1.2,
-    ease: "power2.out"
-  }, "erp+=7.5");
-
-  const erpExample = new SplitText(".svc-erp .svc-example-text", { type: "lines" });
-  gsap.set(erpExample.lines, { opacity: 0, y: 10, scale: 0.98 });
-  tl.to(erpExample.lines, {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    stagger: 0.25,
-    duration: 1,
-    ease: "power2.out"
-  }, "erp+=9.5");
-  tl.to({}, { duration: 2 }, "erp+=11.5");
+  tl.to({}, { duration: 2 }, "erp+=7");
 
   // ═══════════════════════════════════════
   // TRANSITION → IA  (28 → 30)
@@ -278,10 +230,7 @@ export function initAutomation() {
   tl.to(".svc-erp .svc-lead", { opacity: 0, scale: 0.85, y: -8, filter: "blur(2px)", duration: 1.2, ease: "power2.in" }, "toIa+=0.7");
   tl.to(".svc-erp .svc-title", { opacity: 0, scale: 0.9, y: -6, filter: "blur(2px)", duration: 1.2, ease: "power2.in" }, "toIa+=0.9");
   tl.to(".svc-erp .svc-eyebrow", { opacity: 0, y: -6, filter: "blur(2px)", duration: 1, ease: "power2.in" }, "toIa+=1.1");
-  tl.to(".erp-card", { opacity: 0, scale: 0.6, y: -14, filter: "blur(3px)", stagger: 0.3, duration: 1.5, ease: "power2.in" }, "toIa+=0.2");
-  tl.to(".erp-modules span", { opacity: 0, scale: 0.5, y: -10, filter: "blur(3px)", stagger: 0.2, duration: 1.2, ease: "power2.in" }, "toIa+=0.6");
-  tl.to(erpExample.lines, { opacity: 0, scale: 0.92, y: -8, stagger: { each: 0.08, from: "end" }, duration: 0.8, ease: "power2.in" }, "toIa+=1");
-  tl.to(".svc-erp .svc-example-text", { opacity: 0, filter: "blur(2px)", duration: 1, ease: "power2.in" }, "toIa+=1.2");
+  tl.to(".erp-kpi", { opacity: 0, scale: 0.6, y: -14, filter: "blur(3px)", stagger: 0.3, duration: 1.5, ease: "power2.in" }, "toIa+=0.2");
 
   tl.to(panels[1], { opacity: 0, y: -30, duration: 2, ease: "power2.inOut" }, "toIa");
   tl.set(panels[1], { visibility: "hidden" }, "toIa+=2");
@@ -300,32 +249,17 @@ export function initAutomation() {
   tl.to(".svc-ia .svc-block", { opacity: 1, y: 0, stagger: 0.8, duration: 2, ease: "power2.out" }, "ia+=3.5");
   tl.to(".svc-ia .svc-benefits", { opacity: 1, y: 0, duration: 2, ease: "power2.out" }, "ia+=5.5");
 
-  tl.to(".ia-core", { opacity: 1, scale: 1, duration: 2, ease: "back.out(1.4)" }, "ia+=4");
-  tl.to(".ia-node", {
-    opacity: 1,
-    stagger: 0.3,
-    duration: 1.5,
-    ease: "power2.out"
-  }, "ia+=5.5");
+  tl.to(".ia-phone", { opacity: 1, y: 0, duration: 2, ease: "power2.out" }, "ia+=4");
 
-  tl.to(".ia-msg", {
+  tl.to(".ia-bubble", {
     opacity: 1,
     y: 0,
     stagger: 0.8,
     duration: 1.5,
     ease: "power2.out"
-  }, "ia+=7.5");
+  }, "ia+=6");
 
-  const iaExample = new SplitText(".svc-ia .svc-example-text", { type: "words" });
-  gsap.set(iaExample.words, { opacity: 0, y: 6 });
-  tl.to(iaExample.words, {
-    opacity: 1,
-    y: 0,
-    stagger: { each: 0.06, from: "start" },
-    duration: 0.8,
-    ease: "power3.out"
-  }, "ia+=10");
-  tl.to({}, { duration: 2 }, "ia+=11.5");
+  tl.to({}, { duration: 2 }, "ia+=8.5");
 
   // ═══════════════════════════════════════
   // TRANSITION → WEB  (42 → 44)
@@ -337,11 +271,8 @@ export function initAutomation() {
   tl.to(".svc-ia .svc-lead", { opacity: 0, scale: 0.85, y: -8, filter: "blur(2px)", duration: 1.2, ease: "power2.in" }, "toWeb+=0.7");
   tl.to(".svc-ia .svc-title", { opacity: 0, scale: 0.9, y: -6, filter: "blur(2px)", duration: 1.2, ease: "power2.in" }, "toWeb+=0.9");
   tl.to(".svc-ia .svc-eyebrow", { opacity: 0, y: -6, filter: "blur(2px)", duration: 1, ease: "power2.in" }, "toWeb+=1.1");
-  tl.to(".ia-core", { opacity: 0, scale: 0.5, filter: "blur(4px)", duration: 1.5, ease: "power2.in" }, "toWeb+=0.2");
-  tl.to(".ia-node", { opacity: 0, scale: 0.5, y: -12, filter: "blur(3px)", stagger: 0.3, duration: 1.2, ease: "power2.in" }, "toWeb+=0.4");
-  tl.to(".ia-msg", { opacity: 0, scale: 0.7, y: -10, filter: "blur(3px)", stagger: 0.3, duration: 1.2, ease: "power2.in" }, "toWeb+=0.8");
-  tl.to(iaExample.words, { opacity: 0, y: -6, stagger: { each: 0.04, from: "end" }, duration: 0.8, ease: "power2.in" }, "toWeb+=1");
-  tl.to(".svc-ia .svc-example-text", { opacity: 0, filter: "blur(2px)", duration: 1, ease: "power2.in" }, "toWeb+=1.2");
+  tl.to(".ia-phone", { opacity: 0, scale: 0.6, y: -14, filter: "blur(3px)", duration: 1.5, ease: "power2.in" }, "toWeb+=0.2");
+  tl.to(".ia-bubble", { opacity: 0, scale: 0.7, y: -10, filter: "blur(3px)", stagger: 0.3, duration: 1.2, ease: "power2.in" }, "toWeb+=0.6");
 
   tl.to(panels[2], { opacity: 0, y: -30, duration: 2, ease: "power2.inOut" }, "toWeb");
   tl.set(panels[2], { visibility: "hidden" }, "toWeb+=2");
@@ -360,32 +291,17 @@ export function initAutomation() {
   tl.to(".svc-web .svc-block", { opacity: 1, y: 0, stagger: 0.8, duration: 2, ease: "power2.out" }, "web+=3.5");
   tl.to(".svc-web .svc-benefits", { opacity: 1, y: 0, duration: 2, ease: "power2.out" }, "web+=5.5");
 
-  tl.to(".web-browser", { opacity: 1, y: 0, duration: 2, ease: "power2.out" }, "web+=4");
-  tl.to(".web-result", {
-    opacity: 1,
-    y: 0,
-    stagger: 0.6,
-    duration: 1.5,
-    ease: "power2.out"
-  }, "web+=5.5");
-  tl.to(".web-metric", {
+  tl.to(".web-card", { opacity: 1, y: 0, duration: 2, ease: "power2.out" }, "web+=4");
+
+  tl.to(".web-stat", {
     opacity: 1,
     y: 0,
     stagger: 0.4,
     duration: 1.2,
     ease: "power2.out"
-  }, "web+=8");
+  }, "web+=6.5");
 
-  const webExample = new SplitText(".svc-web .svc-example-text", { type: "words" });
-  gsap.set(webExample.words, { opacity: 0, y: 4 });
-  tl.to(webExample.words, {
-    opacity: 1,
-    y: 0,
-    stagger: 0.06,
-    duration: 0.8,
-    ease: "power2.out"
-  }, "web+=10");
-  tl.to({}, { duration: 2 }, "web+=11.5");
+  tl.to({}, { duration: 2 }, "web+=8.5");
 
   // ═══════════════════════════════════════
   // TRANSITION → CTA  (56 → 58)
@@ -397,11 +313,8 @@ export function initAutomation() {
   tl.to(".svc-web .svc-lead", { opacity: 0, scale: 0.85, y: -8, filter: "blur(2px)", duration: 1.2, ease: "power2.in" }, "toCta+=0.7");
   tl.to(".svc-web .svc-title", { opacity: 0, scale: 0.9, y: -6, filter: "blur(2px)", duration: 1.2, ease: "power2.in" }, "toCta+=0.9");
   tl.to(".svc-web .svc-eyebrow", { opacity: 0, y: -6, filter: "blur(2px)", duration: 1, ease: "power2.in" }, "toCta+=1.1");
-  tl.to(".web-browser", { opacity: 0, scale: 0.7, y: -12, filter: "blur(3px)", duration: 1.5, ease: "power2.in" }, "toCta+=0.2");
-  tl.to(".web-result", { opacity: 0, scale: 0.6, y: -14, filter: "blur(3px)", stagger: 0.3, duration: 1.2, ease: "power2.in" }, "toCta+=0.5");
-  tl.to(".web-metric", { opacity: 0, scale: 0.5, y: -12, filter: "blur(3px)", stagger: 0.2, duration: 1.2, ease: "power2.in" }, "toCta+=0.8");
-  tl.to(webExample.words, { opacity: 0, y: -6, stagger: { each: 0.04, from: "end" }, duration: 0.8, ease: "power2.in" }, "toCta+=1");
-  tl.to(".svc-web .svc-example-text", { opacity: 0, filter: "blur(2px)", duration: 1, ease: "power2.in" }, "toCta+=1.2");
+  tl.to(".web-card", { opacity: 0, scale: 0.7, y: -12, filter: "blur(3px)", duration: 1.5, ease: "power2.in" }, "toCta+=0.2");
+  tl.to(".web-stat", { opacity: 0, scale: 0.5, y: -12, filter: "blur(3px)", stagger: 0.2, duration: 1.2, ease: "power2.in" }, "toCta+=0.6");
 
   tl.to(panels[3], { opacity: 0, y: -30, duration: 2, ease: "power2.inOut" }, "toCta");
   tl.set(panels[3], { visibility: "hidden" }, "toCta+=2");

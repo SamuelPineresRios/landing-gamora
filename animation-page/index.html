@@ -109,22 +109,26 @@
           </div>
 
           <div class="svc-visual" aria-hidden="true">
-            <div class="flow-board">
-              <div class="flow-node" data-step="0"><span><span class="cyan">Formulario</span> recibido</span></div>
-              <div class="flow-pipe" data-pipe="0"></div>
-              <div class="flow-node" data-step="1"><span><span class="cyan">Cliente</span> creado</span></div>
-              <div class="flow-pipe" data-pipe="1"></div>
-              <div class="flow-node" data-step="2"><span><span class="cyan">Factura</span> generada</span></div>
-              <div class="flow-pipe" data-pipe="2"></div>
-              <div class="flow-node" data-step="3"><span><span class="cyan">Correo</span> enviado</span></div>
-              <div class="flow-pipe" data-pipe="3"></div>
-              <div class="flow-node" data-step="4"><span><span class="cyan">Equipo</span> notificado</span></div>
-            </div>
-            <div class="svc-example">
-              <span class="svc-label">Así funciona en la práctica</span>
-                <p class="svc-example-text">Un cliente llena tu <span class="cyan">formulario</span>. A las <span class="cyan">9:03 AM</span> el sistema ya
-               <span class="cyan">creó su perfil</span>, generó la <span class="cyan">factura #1247</span>,
-               <span class="cyan">descontó inventario</span> y <span class="cyan">avisó a logística</span>. <span class="cyan">Tu equipo solo ejecuta.</span></p>
+            <div class="flow-track">
+              <div class="flow-step" data-step="0">
+                <span class="flow-dot"></span>
+                <span class="flow-bar"></span>
+                <span class="flow-text">Formulario recibido</span>
+              </div>
+              <div class="flow-step" data-step="1">
+                <span class="flow-dot"></span>
+                <span class="flow-bar"></span>
+                <span class="flow-text">Perfil creado</span>
+              </div>
+              <div class="flow-step" data-step="2">
+                <span class="flow-dot"></span>
+                <span class="flow-bar"></span>
+                <span class="flow-text">Factura emitida</span>
+              </div>
+              <div class="flow-step" data-step="3">
+                <span class="flow-dot"></span>
+                <span class="flow-text">Equipo notificado</span>
+              </div>
             </div>
           </div>
         </div>
@@ -157,39 +161,27 @@
           </div>
 
           <div class="svc-visual" aria-hidden="true">
-            <div class="erp-dash">
-              <div class="erp-card" data-mod="ventas">
-                <span class="erp-card-k">Ventas</span>
-                <span class="erp-card-v"><span class="cyan">$128.4k</span></span>
-                <span class="erp-card-d up">+12%</span>
+            <div class="erp-grid">
+              <div class="erp-kpi" data-kpi="0">
+                <span class="erp-value"><span class="cyan">$128.4k</span></span>
+                <span class="erp-key">Ventas del mes</span>
+                <span class="erp-delta up">+12%</span>
               </div>
-              <div class="erp-card" data-mod="stock">
-                <span class="erp-card-k">Inventario</span>
-                <span class="erp-card-v"><span class="cyan">1.842</span></span>
-                <span class="erp-card-d">unidades</span>
+              <div class="erp-kpi" data-kpi="1">
+                <span class="erp-value"><span class="cyan">1.842</span></span>
+                <span class="erp-key">En inventario</span>
+                <span class="erp-delta">unidades</span>
               </div>
-              <div class="erp-card" data-mod="clientes">
-                <span class="erp-card-k">Clientes</span>
-                <span class="erp-card-v"><span class="cyan">364</span></span>
-                <span class="erp-card-d up">+8 hoy</span>
+              <div class="erp-kpi" data-kpi="2">
+                <span class="erp-value"><span class="cyan">364</span></span>
+                <span class="erp-key">Clientes activos</span>
+                <span class="erp-delta up">+8 hoy</span>
               </div>
-              <div class="erp-card" data-mod="finanzas">
-                <span class="erp-card-k">Finanzas</span>
-                <span class="erp-card-v"><span class="cyan">OK</span></span>
-                <span class="erp-card-d">al día</span>
+              <div class="erp-kpi" data-kpi="3">
+                <span class="erp-value"><span class="cyan">OK</span></span>
+                <span class="erp-key">Finanzas</span>
+                <span class="erp-delta">al día</span>
               </div>
-              <div class="erp-modules">
-                <span>Ventas</span><span>Inventario</span><span>Compras</span>
-                <span>Clientes</span><span>Proveedores</span><span>Empleados</span>
-                <span>Finanzas</span><span>Reportes</span>
-              </div>
-            </div>
-            <div class="svc-example">
-              <span class="svc-label">Así funciona en la práctica</span>
-                <p class="svc-example-text">Vendiste <span class="cyan">SKU-8842</span>. <span class="cyan">Al instante</span>: inventario
-               <span class="cyan">actualizado</span>, <span class="cyan">factura emitida</span>,
-               historial del cliente al día y finanzas sincronizadas.
-               <span class="cyan">Sin llamar a nadie.</span></p>
             </div>
           </div>
         </div>
@@ -222,31 +214,14 @@
           </div>
 
           <div class="svc-visual" aria-hidden="true">
-            <div class="ia-hub">
-              <div class="ia-arena">
-                <div class="ia-core"><span>IA</span></div>
-                <div class="ia-orbit">
-                  <span class="ia-node" style="--i:0"><span class="cyan">WhatsApp</span></span>
-                  <span class="ia-node" style="--i:1">CRM</span>
-                  <span class="ia-node" style="--i:2"><span class="cyan">ERP</span></span>
-                  <span class="ia-node" style="--i:3">Sheets</span>
-                  <span class="ia-node" style="--i:4"><span class="cyan">Inventario</span></span>
-                  <span class="ia-node" style="--i:5">Agenda</span>
-                </div>
+            <div class="ia-phone">
+              <div class="ia-topbar">WhatsApp Business</div>
+              <div class="ia-screen">
+                <div class="ia-bubble ia-in" data-msg="0">Hola, ¿tienen stock del modelo X?</div>
+                <div class="ia-bubble ia-out" data-msg="1">¡Sí! <span class="cyan">14 unidades</span>. ¿Te armo la cotización?</div>
+                <div class="ia-bubble ia-in" data-msg="2">Sí, porfa</div>
+                <div class="ia-bubble ia-out" data-msg="3">Listo. <span class="cyan">Enviada a tu correo</span> ✓</div>
               </div>
-              <div class="ia-chat">
-                <div class="ia-msg in">¿Tienen stock del modelo X?</div>
-                <div class="ia-msg out">Sí, <span class="cyan">14 unidades</span>. ¿Te armo la <span class="cyan">cotización</span>?</div>
-                <div class="ia-msg out">Listo. Te la <span class="cyan">envié</span> y <span class="cyan">agendé seguimiento</span>.</div>
-              </div>
-            </div>
-            <div class="svc-example">
-              <span class="svc-label">Así funciona en la práctica</span>
-                <p class="svc-example-text"><span class="cyan">11 PM</span>. Cliente escribe <span class="cyan">por WhatsApp</span>.
-               La IA <span class="cyan">revisa inventario</span>, confirma
-               <span class="cyan">14 unidades</span>, <span class="cyan">arma la cotización</span>
-               y <span class="cyan">agenda seguimiento</span>.
-               <span class="cyan">Todo resuelto mientras duermes.</span></p>
             </div>
           </div>
         </div>
@@ -279,48 +254,18 @@
           </div>
 
           <div class="svc-visual" aria-hidden="true">
-            <div class="web-browser">
-              <div class="web-chrome">
-                <span class="web-dot"></span><span class="web-dot"></span><span class="web-dot"></span>
-                <div class="web-url">google.com/search?q=tu+servicio</div>
+            <div class="web-card">
+              <div class="web-bar">tu servicio profesional</div>
+              <div class="web-result-top">
+                <span class="web-url">tuempresa.com</span>
+                <span class="web-title">Tu Empresa — Soluciones profesionales</span>
+                <span class="web-desc">La solución que buscabas. Cotiza en minutos.</span>
               </div>
-              <div class="web-results">
-                <div class="web-result top">
-                  <span class="web-rank">1</span>
-                  <div>
-                    <p class="web-r-title">Tu Empresa — Servicio profesional</p>
-                    <p class="web-r-url">tuempresa.com</p>
-                    <p class="web-r-desc">La solución que buscabas. Cotiza en minutos.</p>
-                  </div>
-                </div>
-                <div class="web-result">
-                  <span class="web-rank">2</span>
-                  <div>
-                    <p class="web-r-title">Competidor A</p>
-                    <p class="web-r-url">competidor-a.com</p>
-                  </div>
-                </div>
-                <div class="web-result">
-                  <span class="web-rank">3</span>
-                  <div>
-                    <p class="web-r-title">Competidor B</p>
-                    <p class="web-r-url">competidor-b.com</p>
-                  </div>
-                </div>
+              <div class="web-stats">
+                <span class="web-stat"><strong>0.9s</strong> carga</span>
+                <span class="web-stat"><strong>98</strong> SEO</span>
+                <span class="web-stat"><strong>100%</strong> móvil</span>
               </div>
-              <div class="web-metrics">
-                <div class="web-metric"><span class="wm-v">0.9s</span><span class="wm-k">carga</span></div>
-                <div class="web-metric"><span class="wm-v">98</span><span class="wm-k">SEO</span></div>
-                <div class="web-metric"><span class="wm-v"><span class="cyan">100%</span></span><span class="wm-k">móvil</span></div>
-              </div>
-            </div>
-            <div class="svc-example">
-              <span class="svc-label">Así funciona en la práctica</span>
-                <p class="svc-example-text">Buscan <span class="cyan">"servicio de [tu rubro]"</span>
-               en Google. Apareces <span class="cyan">primero</span>.
-               Tu sitio carga en <span class="cyan">0.9s</span>, se ve perfecto en celular
-               y <span class="cyan">convierte la visita en cliente</span>.
-               <span class="cyan">Sin pagar anuncios.</span></p>
             </div>
           </div>
         </div>

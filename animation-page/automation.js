@@ -62,7 +62,12 @@ export function initAutomation() {
     opacity: 0,
     y: 28
   });
-  gsap.set(".flow-step", { opacity: 0, y: 10 });
+  gsap.set(".flow-node", { opacity: 0, scale: 0.85 });
+  gsap.set(".flow-group-tag, .flow-status", { opacity: 0, y: -6 });
+  gsap.set(".flow-path", {
+    strokeDasharray: (i, el) => el.getTotalLength(),
+    strokeDashoffset: (i, el) => el.getTotalLength()
+  });
 
   // Panel 1
   gsap.set(".svc-erp .svc-eyebrow, .svc-erp .svc-title, .svc-erp .svc-lead, .svc-erp .svc-block, .svc-erp .svc-benefits", {
@@ -138,26 +143,72 @@ export function initAutomation() {
   tl.to(".svc-auto .svc-block", { opacity: 1, y: 0, stagger: 0.8, duration: 2, ease: "power2.out" }, "auto+=3.5");
   tl.to(".svc-auto .svc-benefits", { opacity: 1, y: 0, duration: 2, ease: "power2.out" }, "auto+=5.5");
 
-  // Flow cascade — fade in + light up
-  const flowSteps = gsap.utils.toArray(".flow-step");
-  const flowBars = gsap.utils.toArray(".flow-bar");
-  flowSteps.forEach((node, i) => {
+  // Flow diagram — trigger → branch (Perfil creado / Factura emitida) → merge
+  const flowNodes = gsap.utils.toArray(".flow-node");
+  const flowPaths = gsap.utils.toArray(".flow-path");
+  const flowPulses = gsap.utils.toArray(".flow-pulse-line");
+
+  const flowNode = {};
+  flowNodes.forEach((n) => { flowNode[n.dataset.node] = n; });
+  const flowPath = {};
+  flowPaths.forEach((p) => { flowPath[p.dataset.path] = p; });
+  const flowPulse = {};
+  flowPulses.forEach((p) => { flowPulse[p.dataset.pulse] = p; });
+
+  const flowTag = {
+    trigger: section.querySelector(".flow-group-tag--trigger"),
+    parallel: section.querySelector(".flow-group-tag--parallel")
+  };
+  const flowStatus = section.querySelector(".flow-status");
+  const flowDiagram = section.querySelector(".flow-diagram");
+
+  const litNode = (node, on) => node.classList.toggle("is-lit", on);
+  const litPath = (path, on) => {
+    path.classList.toggle("is-lit", on);
+    const pulse = flowPulse[path.dataset.path];
+    if (pulse) pulse.classList.toggle("is-live", on);
+  };
+
+  const popIn = (node, time) => {
+    const icon = node.querySelector(".flow-node-icon");
     tl.to(node, {
       opacity: 1,
-      y: 0,
-      duration: 1.2,
-      ease: "power2.out",
-      onStart: () => node.classList.add("lit"),
-      onReverseComplete: () => node.classList.remove("lit")
-    }, `auto+=${4 + i * 1}`);
-    if (flowBars[i]) {
-      tl.to(flowBars[i], {
-        opacity: 1,
-        duration: 1,
-        ease: "power2.out"
-      }, `auto+=${5 + i * 1}`);
-    }
-  });
+      scale: 1,
+      duration: 1,
+      ease: "back.out(1.6)",
+      onStart: () => {
+        litNode(node, true);
+        if (icon) gsap.fromTo(icon, { scale: 0.4 }, { scale: 1, duration: 0.55, ease: "back.out(3)" });
+      },
+      onReverseComplete: () => litNode(node, false)
+    }, time);
+  };
+  const drawPath = (path, time) => {
+    tl.to(path, {
+      strokeDashoffset: 0,
+      duration: 1,
+      ease: "power2.inOut",
+      onStart: () => litPath(path, true),
+      onReverseComplete: () => litPath(path, false)
+    }, time);
+  };
+  const revealTag = (tag, time) => {
+    if (!tag) return;
+    tl.to(tag, { opacity: 0.9, y: 0, duration: 0.8, ease: "power2.out" }, time);
+  };
+
+  popIn(flowNode["0"], "auto+=4");
+  revealTag(flowTag.trigger, "auto+=4.1");
+  drawPath(flowPath["a"], "auto+=4.6");
+  drawPath(flowPath["b"], "auto+=4.6");
+  popIn(flowNode["1"], "auto+=5.4");
+  popIn(flowNode["2"], "auto+=5.4");
+  revealTag(flowTag.parallel, "auto+=5.5");
+  drawPath(flowPath["c"], "auto+=6.2");
+  drawPath(flowPath["d"], "auto+=6.2");
+  popIn(flowNode["3"], "auto+=7");
+  if (flowStatus) tl.to(flowStatus, { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "auto+=7.6");
+  if (flowDiagram) tl.add(() => flowDiagram.classList.add("is-complete"), "auto+=8");
 
   tl.to({}, { duration: 2 }, "auto+=8");
 
@@ -166,6 +217,12 @@ export function initAutomation() {
   // ═══════════════════════════════════════
   tl.addLabel("toErp", 14);
 
+  if (flowDiagram) tl.add(() => flowDiagram.classList.remove("is-complete"), "toErp");
+  const flowTagsAndStatus = [flowTag.trigger, flowTag.parallel, flowStatus].filter(Boolean);
+  if (flowTagsAndStatus.length) {
+    tl.to(flowTagsAndStatus, { opacity: 0, y: -6, duration: 0.6, ease: "power2.in" }, "toErp");
+  }
+
   // DUST DISSOLVE → every element in Auto panel dissolves before exit
   tl.to(".svc-auto .svc-benefits", { opacity: 0, scale: 0.7, y: -12, filter: "blur(2px)", duration: 1.2, ease: "power2.in" }, "toErp+=0.3");
   tl.to(".svc-auto .svc-block", { opacity: 0, scale: 0.8, y: -10, filter: "blur(2px)", stagger: 0.3, duration: 1.2, ease: "power2.in" }, "toErp+=0.5");
@@ -173,24 +230,25 @@ export function initAutomation() {
   tl.to(".svc-auto .svc-title", { opacity: 0, scale: 0.9, y: -6, filter: "blur(2px)", duration: 1.2, ease: "power2.in" }, "toErp+=0.9");
   tl.to(".svc-auto .svc-eyebrow", { opacity: 0, y: -6, filter: "blur(2px)", duration: 1, ease: "power2.in" }, "toErp+=1.1");
 
-  flowSteps.forEach((node, i) => {
+  [flowNode["3"], flowNode["2"], flowNode["1"], flowNode["0"]].forEach((node, i) => {
     tl.to(node, {
       opacity: 0,
       scale: 0.8,
-      y: -10,
       filter: "blur(2px)",
-      duration: 1.2,
+      duration: 1,
       ease: "power2.in",
-      onStart: () => node.classList.remove("lit"),
-      onReverseComplete: () => node.classList.add("lit")
-    }, `toErp+=${0.1 + (flowSteps.length - 1 - i) * 0.25}`);
+      onStart: () => litNode(node, false),
+      onReverseComplete: () => litNode(node, true)
+    }, `toErp+=${0.1 + i * 0.2}`);
   });
-  flowBars.forEach((bar, i) => {
-    tl.to(bar, {
-      opacity: 0,
-      duration: 0.8,
-      ease: "power1.in"
-    }, `toErp+=${0.3 + (flowBars.length - 1 - i) * 0.25}`);
+  [flowPath["d"], flowPath["c"], flowPath["b"], flowPath["a"]].forEach((path, i) => {
+    tl.to(path, {
+      strokeDashoffset: path.getTotalLength(),
+      duration: 0.9,
+      ease: "power2.in",
+      onStart: () => litPath(path, false),
+      onReverseComplete: () => litPath(path, true)
+    }, `toErp+=${0.1 + i * 0.2}`);
   });
 
   tl.to(panels[0], { opacity: 0, y: -30, duration: 2, ease: "power2.inOut" }, "toErp");

@@ -109,25 +109,67 @@
           </div>
 
           <div class="svc-visual" aria-hidden="true">
-            <div class="flow-track">
-              <div class="flow-step" data-step="0">
-                <span class="flow-dot"></span>
-                <span class="flow-bar"></span>
-                <span class="flow-text">Formulario recibido</span>
+            <div class="flow-diagram-wrap">
+              <div class="flow-diagram">
+                <svg class="flow-svg" viewBox="0 0 720 500" preserveAspectRatio="none">
+                  <path id="fp-a" class="flow-path" data-path="a" d="M210,270 C280,270 280,128 370,128" />
+                  <path id="fp-b" class="flow-path" data-path="b" d="M210,270 L370,270" />
+                  <path id="fp-c" class="flow-path" data-path="c" d="M525,325 C525,342 525,350 525,357" />
+                  <path id="fp-d" class="flow-path" data-path="d" d="M680,128 C705,128 705,412 680,412" />
+
+                  <use href="#fp-a" class="flow-pulse-line" data-pulse="a" />
+                  <use href="#fp-b" class="flow-pulse-line" data-pulse="b" />
+                  <use href="#fp-c" class="flow-pulse-line" data-pulse="c" />
+                  <use href="#fp-d" class="flow-pulse-line" data-pulse="d" />
+                </svg>
+
+                <span class="flow-group-tag flow-group-tag--trigger">Disparador</span>
+                <span class="flow-group-tag flow-group-tag--parallel">Ejecución en paralelo</span>
+
+                <div class="flow-node flow-node--trigger" data-node="0" data-step="1">
+                  <span class="flow-node-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.5 2.8-6 6-6s6 2.5 6 6"/><path d="M18 8v5M15.5 10.5h5"/></svg>
+                  </span>
+                  <span class="flow-node-body">
+                    <span class="flow-node-title">Formulario recibido</span>
+                    <span class="flow-node-sub">Nuevo lead desde la web</span>
+                  </span>
+                </div>
+
+                <div class="flow-node flow-node--a" data-node="1" data-step="2">
+                  <span class="flow-node-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>
+                  </span>
+                  <span class="flow-node-body">
+                    <span class="flow-node-title">Perfil creado</span>
+                    <span class="flow-node-sub">Se registra en el CRM</span>
+                  </span>
+                </div>
+
+                <div class="flow-node flow-node--b" data-node="2" data-step="3">
+                  <span class="flow-node-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/><path d="M9.5 13h5M9.5 16.5h5"/></svg>
+                  </span>
+                  <span class="flow-node-body">
+                    <span class="flow-node-title">Factura emitida</span>
+                    <span class="flow-node-sub">Se genera automáticamente</span>
+                  </span>
+                </div>
+
+                <div class="flow-node flow-node--final" data-node="3" data-step="4">
+                  <span class="flow-node-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10a6 6 0 1112 0c0 4 1.5 5.5 1.5 5.5H4.5S6 14 6 10z"/><path d="M10 18.5a2 2 0 004 0"/></svg>
+                  </span>
+                  <span class="flow-node-body">
+                    <span class="flow-node-title">Equipo notificado</span>
+                    <span class="flow-node-sub">Alerta enviada por Slack</span>
+                  </span>
+                </div>
               </div>
-              <div class="flow-step" data-step="1">
-                <span class="flow-dot"></span>
-                <span class="flow-bar"></span>
-                <span class="flow-text">Perfil creado</span>
-              </div>
-              <div class="flow-step" data-step="2">
-                <span class="flow-dot"></span>
-                <span class="flow-bar"></span>
-                <span class="flow-text">Factura emitida</span>
-              </div>
-              <div class="flow-step" data-step="3">
-                <span class="flow-dot"></span>
-                <span class="flow-text">Equipo notificado</span>
+
+              <div class="flow-status">
+                <span class="flow-status-dot"></span>
+                <span>Automatización activa 24/7</span>
               </div>
             </div>
           </div>

@@ -262,17 +262,38 @@ export function initAutomation() {
   tl.to({}, { duration: 2 }, "ia+=8.5");
 
   // ═══════════════════════════════════════
-  // TRANSITION → WEB  (42 → 44.5) — horizontal slide
+  // TRANSITION → WEB  (42 → 44.6) — horizontal slide
   // ═══════════════════════════════════════
   tl.addLabel("toWeb", 42);
 
-  // Web panel starts off-screen left, IA slides out to the right
+  // IA starts sliding out slowly, then accelerates (power4.in)
+  // Web panel waits until IA is mostly gone, then enters fast
   tl.set(panels[3], { visibility: "visible", opacity: 1, x: "-100%" }, "toWeb");
-  tl.to(panels[2], { x: "100%", duration: 2.5, ease: "power2.inOut" }, "toWeb");
-  tl.to(panels[3], { x: 0, duration: 2.5, ease: "power2.out" }, "toWeb");
-  // After slide, hide the IA panel and reset its x position
+  tl.to(panels[2], { x: "100%", duration: 2.5, ease: "power4.in" }, "toWeb");
+  tl.to(panels[3], { x: 0, duration: 1.2, ease: "power2.out" }, "toWeb+=1.4");
+
+  // Shader gravity drop + bounce when Web enters
+  const shaderBounce = { t: 0 };
+  tl.to(shaderBounce, {
+    t: 1,
+    duration: 2.5,
+    ease: "none",
+    onUpdate: () => {
+      const u = window.__shaderUniforms;
+      if (!u) return;
+      const v = shaderBounce.t;
+      let m;
+      if (v < 0.15)                m = 1 - (v / 0.15) * 0.45;       // gravity drop  →  1 → 0.55
+      else if (v < 0.4)           m = 0.55 + ((v - 0.15) / 0.25) * 0.55; // bounce up → 0.55 → 1.1
+      else if (v < 0.7)           m = 1.1 * Math.exp(-(v - 0.4) * 4) + 0.85 * (1 - Math.exp(-(v - 0.4) * 4)); // settle
+      else                        m = 0.85;
+      u.uMovementScale.value = 0.85 * m;
+    }
+  }, "toWeb");
+
+  // Cleanup after slide
   tl.set(panels[2], { visibility: "hidden", x: 0 }, "toWeb+=2.6");
-  tl.add(() => { setActivePanel(panels[3]); setActiveDot(3); }, "toWeb+=0.8");
+  tl.add(() => { setActivePanel(panels[3]); setActiveDot(3); }, "toWeb+=1.6");
 
   // ═══════════════════════════════════════
   // PANEL 3 — WEB  (44 → 56)
@@ -410,5 +431,8 @@ function modulateShader(progress, tl) {
   u.uAmbientIntensity.value += (ambientTarget - u.uAmbientIntensity.value) * lerpFactor;
   u.uSpecularIntensity.value += (specularTarget - u.uSpecularIntensity.value) * lerpFactor;
   u.uCursorGlowIntensity.value += (glowIntensityTarget - u.uCursorGlowIntensity.value) * lerpFactor;
-  u.uMovementScale.value += (movementTarget - u.uMovementScale.value) * lerpFactor;
+  const tpSkip = tp >= 42 && tp <= 44.6;
+  if (!tpSkip) {
+    u.uMovementScale.value += (movementTarget - u.uMovementScale.value) * lerpFactor;
+  }
 }

@@ -74,23 +74,18 @@ export function initAutomation() {
     opacity: 0,
     y: 28
   });
-  gsap.set(".erp-kpi", { opacity: 0, y: 16 });
 
   // Panel 2
   gsap.set(".svc-ia .svc-eyebrow, .svc-ia .svc-title, .svc-ia .svc-lead, .svc-ia .svc-block, .svc-ia .svc-benefits", {
     opacity: 0,
     y: 28
   });
-  gsap.set(".ia-phone", { opacity: 0, y: 20 });
-  gsap.set(".ia-bubble", { opacity: 0, y: 10 });
 
   // Panel 3
   gsap.set(".svc-web .svc-eyebrow, .svc-web .svc-title, .svc-web .svc-lead, .svc-web .svc-block, .svc-web .svc-benefits", {
     opacity: 0,
     y: 28
   });
-  gsap.set(".web-card", { opacity: 0, y: 20 });
-  gsap.set(".web-stat", { opacity: 0, y: 8 });
 
   // CTA
   gsap.set(".svc-cta-title, .svc-cta .cta-primary, .svc-cta .contact-block", {
@@ -268,14 +263,6 @@ export function initAutomation() {
   tl.to(".svc-erp .svc-block", { opacity: 1, y: 0, stagger: 0.8, duration: 2, ease: "power2.out" }, "erp+=3.5");
   tl.to(".svc-erp .svc-benefits", { opacity: 1, y: 0, duration: 2, ease: "power2.out" }, "erp+=5.5");
 
-  tl.to(".erp-kpi", {
-    opacity: 1,
-    y: 0,
-    stagger: 0.5,
-    duration: 1.8,
-    ease: "power2.out"
-  }, "erp+=4");
-
   tl.to({}, { duration: 2 }, "erp+=7");
 
   // ═══════════════════════════════════════
@@ -288,7 +275,6 @@ export function initAutomation() {
   tl.to(".svc-erp .svc-lead", { opacity: 0, scale: 0.85, y: -8, filter: "blur(2px)", duration: 1.2, ease: "power2.in" }, "toIa+=0.7");
   tl.to(".svc-erp .svc-title", { opacity: 0, scale: 0.9, y: -6, filter: "blur(2px)", duration: 1.2, ease: "power2.in" }, "toIa+=0.9");
   tl.to(".svc-erp .svc-eyebrow", { opacity: 0, y: -6, filter: "blur(2px)", duration: 1, ease: "power2.in" }, "toIa+=1.1");
-  tl.to(".erp-kpi", { opacity: 0, scale: 0.6, y: -14, filter: "blur(3px)", stagger: 0.3, duration: 1.5, ease: "power2.in" }, "toIa+=0.2");
 
   tl.to(panels[1], { opacity: 0, y: -30, duration: 2, ease: "power2.inOut" }, "toIa");
   tl.set(panels[1], { visibility: "hidden" }, "toIa+=2");
@@ -307,17 +293,7 @@ export function initAutomation() {
   tl.to(".svc-ia .svc-block", { opacity: 1, y: 0, stagger: 0.8, duration: 2, ease: "power2.out" }, "ia+=3.5");
   tl.to(".svc-ia .svc-benefits", { opacity: 1, y: 0, duration: 2, ease: "power2.out" }, "ia+=5.5");
 
-  tl.to(".ia-phone", { opacity: 1, y: 0, duration: 2, ease: "power2.out" }, "ia+=4");
-
-  tl.to(".ia-bubble", {
-    opacity: 1,
-    y: 0,
-    stagger: 0.8,
-    duration: 1.5,
-    ease: "power2.out"
-  }, "ia+=6");
-
-  tl.to({}, { duration: 2 }, "ia+=8.5");
+  tl.to({}, { duration: 2 }, "ia+=7");
 
   // ═══════════════════════════════════════
   // TRANSITION → WEB  (42 → 44.6) — horizontal slide
@@ -364,17 +340,7 @@ export function initAutomation() {
   tl.to(".svc-web .svc-block", { opacity: 1, y: 0, stagger: 0.8, duration: 2, ease: "power2.out" }, "web+=3.5");
   tl.to(".svc-web .svc-benefits", { opacity: 1, y: 0, duration: 2, ease: "power2.out" }, "web+=5.5");
 
-  tl.to(".web-card", { opacity: 1, y: 0, duration: 2, ease: "power2.out" }, "web+=4");
-
-  tl.to(".web-stat", {
-    opacity: 1,
-    y: 0,
-    stagger: 0.4,
-    duration: 1.2,
-    ease: "power2.out"
-  }, "web+=6.5");
-
-  tl.to({}, { duration: 2 }, "web+=8.5");
+  tl.to({}, { duration: 2 }, "web+=7");
 
   // ═══════════════════════════════════════
   // TRANSITION → CTA  (56 → 58)
@@ -386,8 +352,6 @@ export function initAutomation() {
   tl.to(".svc-web .svc-lead", { opacity: 0, scale: 0.85, y: -8, filter: "blur(2px)", duration: 1.2, ease: "power2.in" }, "toCta+=0.7");
   tl.to(".svc-web .svc-title", { opacity: 0, scale: 0.9, y: -6, filter: "blur(2px)", duration: 1.2, ease: "power2.in" }, "toCta+=0.9");
   tl.to(".svc-web .svc-eyebrow", { opacity: 0, y: -6, filter: "blur(2px)", duration: 1, ease: "power2.in" }, "toCta+=1.1");
-  tl.to(".web-card", { opacity: 0, scale: 0.7, y: -12, filter: "blur(3px)", duration: 1.5, ease: "power2.in" }, "toCta+=0.2");
-  tl.to(".web-stat", { opacity: 0, scale: 0.5, y: -12, filter: "blur(3px)", stagger: 0.2, duration: 1.2, ease: "power2.in" }, "toCta+=0.6");
 
   tl.to(panels[3], { opacity: 0, y: -30, duration: 2, ease: "power2.inOut" }, "toCta");
   tl.set(panels[3], { visibility: "hidden" }, "toCta+=2");

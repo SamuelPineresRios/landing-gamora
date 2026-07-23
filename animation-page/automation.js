@@ -52,6 +52,11 @@ export function initAutomation() {
   );
   gsap.set(heroUi, { opacity: 1 });
 
+  // ── IA title split (word-by-word cascade, unique to this panel) ──
+  const iaTitleEl = document.querySelector(".svc-ia .ia-hero-title--centered");
+  const iaTitleSplit = iaTitleEl && SplitText ? new SplitText(iaTitleEl, { type: "words", wordsClass: "ia-word" }) : null;
+  const iaWords = iaTitleSplit ? iaTitleSplit.words : [];
+
   // ── Initial panel states ──
   gsap.set(panels, { opacity: 0, visibility: "hidden" });
   gsap.set(panels[0], { opacity: 1, visibility: "visible" });
@@ -74,12 +79,18 @@ export function initAutomation() {
     opacity: 0,
     y: 28
   });
+  gsap.set(".svc-erp .svc-annotate, .svc-erp .erp-status", { opacity: 0, y: 16 });
+  gsap.set(".svc-erp .erp-frame", { opacity: 0, scale: 0.94 });
 
   // Panel 2
-  gsap.set(".svc-ia .svc-eyebrow, .svc-ia .svc-title, .svc-ia .svc-lead, .svc-ia .svc-block, .svc-ia .svc-benefits", {
+  gsap.set(".svc-ia .svc-eyebrow, .svc-ia .svc-lead, .svc-ia .svc-benefits", {
     opacity: 0,
-    y: 28
+    y: 24
   });
+  if (iaWords.length) gsap.set(iaWords, { opacity: 0, y: 22 });
+  gsap.set(".svc-ia .ia-shift-before", { opacity: 0, x: 16 });
+  gsap.set(".svc-ia .ia-shift-arrow", { opacity: 0, scale: 0.4 });
+  gsap.set(".svc-ia .ia-shift-after", { opacity: 0, x: -16 });
 
   // Panel 3
   gsap.set(".svc-web .svc-eyebrow, .svc-web .svc-title, .svc-web .svc-lead, .svc-web .svc-block, .svc-web .svc-benefits", {
@@ -263,6 +274,10 @@ export function initAutomation() {
   tl.to(".svc-erp .svc-block", { opacity: 1, y: 0, stagger: 0.8, duration: 2, ease: "power2.out" }, "erp+=3.5");
   tl.to(".svc-erp .svc-benefits", { opacity: 1, y: 0, duration: 2, ease: "power2.out" }, "erp+=5.5");
 
+  tl.to(".svc-erp .svc-annotate", { opacity: 0.9, y: 0, duration: 1.6, ease: "power2.out" }, "erp+=1.5");
+  tl.to(".svc-erp .erp-frame", { opacity: 1, scale: 1, duration: 2, ease: "power2.out" }, "erp+=2");
+  tl.to(".svc-erp .erp-status", { opacity: 1, y: 0, duration: 1.6, ease: "power2.out" }, "erp+=4");
+
   tl.to({}, { duration: 2 }, "erp+=7");
 
   // ═══════════════════════════════════════
@@ -275,6 +290,9 @@ export function initAutomation() {
   tl.to(".svc-erp .svc-lead", { opacity: 0, scale: 0.85, y: -8, filter: "blur(2px)", duration: 1.2, ease: "power2.in" }, "toIa+=0.7");
   tl.to(".svc-erp .svc-title", { opacity: 0, scale: 0.9, y: -6, filter: "blur(2px)", duration: 1.2, ease: "power2.in" }, "toIa+=0.9");
   tl.to(".svc-erp .svc-eyebrow", { opacity: 0, y: -6, filter: "blur(2px)", duration: 1, ease: "power2.in" }, "toIa+=1.1");
+  tl.to(".svc-erp .erp-status", { opacity: 0, y: -8, duration: 1, ease: "power2.in" }, "toIa+=0.2");
+  tl.to(".svc-erp .erp-frame", { opacity: 0, scale: 0.94, duration: 1.2, ease: "power2.in" }, "toIa+=0.4");
+  tl.to(".svc-erp .svc-annotate", { opacity: 0, y: -8, duration: 1, ease: "power2.in" }, "toIa+=0.6");
 
   tl.to(panels[1], { opacity: 0, y: -30, duration: 2, ease: "power2.inOut" }, "toIa");
   tl.set(panels[1], { visibility: "hidden" }, "toIa+=2");
@@ -287,13 +305,20 @@ export function initAutomation() {
   // ═══════════════════════════════════════
   tl.addLabel("ia", 30);
 
-  tl.to(".svc-ia .svc-eyebrow", { opacity: 0.8, y: 0, duration: 2, ease: "power2.out" }, "ia+=0.5");
-  tl.to(".svc-ia .svc-title", { opacity: 1, y: 0, duration: 2.5, ease: "power2.out" }, "ia+=1");
-  tl.to(".svc-ia .svc-lead", { opacity: 0.9, y: 0, duration: 2, ease: "power2.out" }, "ia+=2");
-  tl.to(".svc-ia .svc-block", { opacity: 1, y: 0, stagger: 0.8, duration: 2, ease: "power2.out" }, "ia+=3.5");
-  tl.to(".svc-ia .svc-benefits", { opacity: 1, y: 0, duration: 2, ease: "power2.out" }, "ia+=5.5");
+  tl.to(".svc-ia .svc-eyebrow", { opacity: 0.8, y: 0, duration: 1.6, ease: "power2.out" }, "ia+=0.4");
+  if (iaWords.length) {
+    tl.to(iaWords, { opacity: 1, y: 0, duration: 1.2, stagger: 0.06, ease: "power3.out" }, "ia+=0.9");
+  }
+  tl.to(".svc-ia .svc-lead", { opacity: 0.9, y: 0, duration: 1.4, ease: "power2.out" }, "ia+=2");
 
-  tl.to({}, { duration: 2 }, "ia+=7");
+  // ── "antes" entra apagado desde la derecha, la flecha aparece, "con IA" entra desde la izquierda ──
+  tl.to(".svc-ia .ia-shift-before", { opacity: 1, x: 0, duration: 1.4, ease: "power2.out" }, "ia+=2.8");
+  tl.to(".svc-ia .ia-shift-arrow", { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(2.5)" }, "ia+=3.6");
+  tl.to(".svc-ia .ia-shift-after", { opacity: 1, x: 0, duration: 1.4, ease: "power2.out" }, "ia+=3.9");
+
+  tl.to(".svc-ia .svc-benefits", { opacity: 1, y: 0, duration: 1.4, ease: "power2.out" }, "ia+=5.2");
+
+  tl.to({}, { duration: 1 }, "ia+=8.6");
 
   // ═══════════════════════════════════════
   // TRANSITION → WEB  (42 → 44.6) — horizontal slide

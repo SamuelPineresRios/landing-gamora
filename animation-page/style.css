@@ -542,6 +542,38 @@ body {
   background: rgba(10, 22, 40, 0.5);
 }
 
+/* ── typewriter benefit cycle (ERP) ── */
+.svc-benefits--typewriter {
+  display: block;
+}
+
+.typewriter-text {
+  font-family: var(--font-primary);
+  font-weight: 600;
+  font-size: clamp(1rem, 1.6vw, 1.3rem);
+  letter-spacing: -0.01em;
+  color: var(--accent-cyan);
+}
+
+.typewriter-caret {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 3px;
+  background: var(--accent-cyan);
+  vertical-align: -0.15em;
+  animation: caretBlink 0.9s step-end infinite;
+}
+
+@keyframes caretBlink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .typewriter-caret { display: none; }
+}
+
 .svc-visual {
   position: relative;
   min-height: 320px;
@@ -790,108 +822,184 @@ body {
   animation: dotPulse 1.8s ease-in-out infinite;
 }
 
-/* ── ERP grid ── */
-.erp-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.85rem;
-}
-
-.erp-kpi {
-  background: rgba(13, 30, 53, 0.6);
-  border-radius: 14px;
-  padding: 1.25rem 1.1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  opacity: 0;
-  transform: translateY(12px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.erp-value {
+/* ── ERP title rhythm (asymmetric weight, echoes reference hero) ── */
+.svc-title-italic {
   font-family: var(--font-primary);
-  font-size: clamp(1.5rem, 2.8vw, 2rem);
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  line-height: 1;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 0.78em;
+  letter-spacing: 0;
 }
 
-.erp-key {
+.svc-title--erp {
+  line-height: 1.04;
+}
+
+/* ── ERP visual: annotate label ── */
+.svc-annotate {
   font-family: var(--font-secondary);
   font-weight: 500;
-  font-size: 10px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: rgba(240, 242, 245, 0.5);
-  margin-top: 0.15rem;
-}
-
-.erp-delta {
-  font-family: var(--font-secondary);
-  font-weight: 500;
-  font-size: 10px;
-  color: rgba(240, 242, 245, 0.4);
-}
-
-.erp-delta.up { color: var(--accent-cyan); }
-
-/* ── IA phone ── */
-.ia-phone {
-  width: 100%;
-  max-width: 280px;
-  margin: 0 auto;
-  border-radius: 20px;
-  overflow: hidden;
-  background: rgba(13, 30, 53, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-}
-
-.ia-topbar {
-  font-family: var(--font-secondary);
-  font-weight: 600;
   font-size: 11px;
-  text-align: center;
-  padding: 0.65rem;
-  color: #f0f2f5;
-  background: rgba(10, 22, 40, 0.7);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.ia-screen {
-  padding: 0.85rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(240, 242, 245, 0.45);
   display: flex;
-  flex-direction: column;
-  gap: 0.55rem;
-  min-height: 200px;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.ia-bubble {
+.svc-annotate-arrow {
+  color: var(--accent-cyan);
+  font-size: 13px;
+}
+
+/* ── ERP visual: video frame ── */
+.erp-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: 18px;
+  overflow: hidden;
+  background: radial-gradient(circle at 55% 45%, rgba(0, 229, 255, 0.16), rgba(10, 22, 40, 0) 65%);
+  border: 1px solid rgba(240, 242, 245, 0.1);
+  box-shadow: 0 0 60px rgba(0, 229, 255, 0.1), inset 0 0 40px rgba(0, 229, 255, 0.05);
+}
+
+.erp-frame-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  mix-blend-mode: screen;
+  filter: saturate(1.15);
+}
+
+.erp-crosshair {
+  position: absolute;
+  top: 1.1rem;
+  right: 1.2rem;
+  width: 14px;
+  height: 14px;
+  z-index: 2;
+}
+
+.erp-crosshair::before,
+.erp-crosshair::after {
+  content: "";
+  position: absolute;
+  background: rgba(240, 242, 245, 0.35);
+}
+
+.erp-crosshair::before { left: 50%; top: 0; width: 1px; height: 100%; transform: translateX(-50%); }
+.erp-crosshair::after { top: 50%; left: 0; height: 1px; width: 100%; transform: translateY(-50%); }
+
+/* ── ERP visual: live status chip (reuses dotPulse keyframe) ── */
+.erp-status {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--font-secondary);
+  font-weight: 500;
+  font-size: 11.5px;
+  letter-spacing: 0.03em;
+  color: rgba(240, 242, 245, 0.5);
+}
+
+.erp-status-dot {
+  width: 7px;
+  height: 7px;
+  min-width: 7px;
+  border-radius: 50%;
+  background: var(--accent-cyan);
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.6);
+  animation: dotPulse 1.8s ease-in-out infinite;
+}
+
+/* ── IA hero (composición centrada, sin imagen — todo el peso lo lleva la tipografía) ── */
+.ia-hero--centered {
+  width: min(52rem, 100%);
+  margin: 0 auto;
+  text-align: center;
+}
+
+.ia-hero-title--centered {
+  font-family: var(--font-secondary);
+  font-weight: 600;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  margin: 0.6rem auto 0.7rem;
+  max-width: 18ch;
+}
+
+.ia-hero-lead {
+  margin: 0 auto 2rem;
+  max-width: 36ch;
+  text-align: center;
+  font-size: clamp(0.92rem, 1.2vw, 1.05rem);
+}
+
+/* ── "antes / con IA" — la estructura hace el trabajo persuasivo:
+   lo viejo se ve apagado y tachado, lo nuevo entra brillante y en negrita. ── */
+.ia-shift {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1rem, 3.5vw, 2.5rem);
+  margin: 0 auto 2rem;
+  max-width: 46rem;
+}
+
+.ia-shift-side {
+  flex: 1;
+  min-width: 0;
+}
+
+.ia-shift-before { text-align: right; }
+.ia-shift-after { text-align: left; }
+
+.ia-shift-label {
+  font-family: var(--font-secondary);
+  font-weight: 600;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.ia-shift-before .ia-shift-label { color: rgba(240, 242, 245, 0.4); }
+.ia-shift-after .ia-shift-label { color: var(--accent-cyan); }
+
+.ia-shift-text {
   font-family: var(--font-primary);
   font-weight: 500;
-  font-size: 0.8rem;
-  line-height: 1.45;
-  padding: 0.5rem 0.7rem;
-  border-radius: 14px;
-  max-width: 82%;
-  opacity: 0;
-  transform: translateY(8px);
+  line-height: 1.5;
+  font-size: clamp(0.85rem, 1.15vw, 1rem);
 }
 
-.ia-in {
-  align-self: flex-start;
-  background: rgba(240, 242, 245, 0.08);
-  color: rgba(240, 242, 245, 0.9);
-  border-bottom-left-radius: 4px;
+.ia-shift-before .ia-shift-text {
+  color: rgba(240, 242, 245, 0.42);
+  text-decoration: line-through;
+  text-decoration-color: rgba(240, 242, 245, 0.28);
+  text-decoration-thickness: 1px;
 }
 
-.ia-out {
-  align-self: flex-end;
-  background: rgba(0, 229, 255, 0.12);
-  color: #f0f2f5;
-  border-bottom-right-radius: 4px;
+.ia-shift-after .ia-shift-text {
+  color: #ffffff;
   font-weight: 600;
+}
+
+.ia-shift-arrow {
+  flex-shrink: 0;
+  font-family: var(--font-primary);
+  font-size: 1.4rem;
+  color: var(--accent-cyan);
+}
+
+.ia-hero-benefits {
+  justify-content: center;
 }
 
 /* ── Web card ── */
@@ -1090,6 +1198,18 @@ body {
     font-size: clamp(0.9rem, 2vw, 1rem);
     max-width: none;
   }
+  .ia-shift {
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 26rem;
+  }
+  .ia-shift-before,
+  .ia-shift-after {
+    text-align: center;
+  }
+  .ia-shift-arrow {
+    transform: rotate(90deg);
+  }
 }
 
 @media (max-width: 768px) {
@@ -1116,6 +1236,7 @@ body {
   .svc-rail { display: none; }
   .svc-benefits { gap: 0.4rem; }
   .svc-benefits li { font-size: 9px; padding: 0.35rem 0.6rem; }
+  .ia-hero-title--centered { font-size: clamp(1.3rem, 6vw, 1.8rem); max-width: none; }
 }
 
 @media (max-width: 480px) {
@@ -1130,4 +1251,6 @@ body {
   .svc-text { font-size: 0.85rem; }
   .svc-benefits li { font-size: 10px; }
   .cta-primary { font-size: 0.9rem; padding: 0.75rem 1.25rem; }
+  .ia-hero-title--centered { font-size: 1.3rem; }
+  .ia-hero-lead { font-size: 0.85rem; }
 }

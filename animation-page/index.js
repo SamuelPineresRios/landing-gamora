@@ -54,6 +54,56 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // ── Typewriter benefit cycle (ERP) ──
+  const erpCycleEl = document.getElementById("erp-benefit-cycle");
+  if (erpCycleEl) {
+    const textEl = erpCycleEl.querySelector(".typewriter-text");
+    const phrases = [
+      "Información centralizada",
+      "Decisiones más rápidas",
+      "Menos pérdidas",
+      "Control real del negocio",
+    ];
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (textEl && !prefersReducedMotion) {
+      const TYPE_SPEED = 55;
+      const DELETE_SPEED = 30;
+      const HOLD_TIME = 1800;
+      const PAUSE_BEFORE_TYPE = 400;
+      let phraseIndex = 0;
+      let charIndex = 0;
+      let typing = true;
+
+      const tick = () => {
+        const current = phrases[phraseIndex];
+        if (typing) {
+          charIndex++;
+          textEl.textContent = current.slice(0, charIndex);
+          if (charIndex === current.length) {
+            typing = false;
+            setTimeout(tick, HOLD_TIME);
+            return;
+          }
+          setTimeout(tick, TYPE_SPEED);
+        } else {
+          charIndex--;
+          textEl.textContent = current.slice(0, charIndex);
+          if (charIndex === 0) {
+            typing = true;
+            phraseIndex = (phraseIndex + 1) % phrases.length;
+            setTimeout(tick, PAUSE_BEFORE_TYPE);
+            return;
+          }
+          setTimeout(tick, DELETE_SPEED);
+        }
+      };
+      tick();
+    } else if (textEl) {
+      textEl.textContent = phrases[0];
+    }
+  }
+
   // ── Email copy interaction (reused component) ──
   const emailLinks = document.querySelectorAll(".contact-email");
   emailLinks.forEach((link) => {
